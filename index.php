@@ -1,5 +1,7 @@
 <?php
+
 $errors = [];
+
 if (isset($_GET['name']) && $_GET['name'] !== '') {
     $name = $_GET['name'];
 } else {
@@ -9,6 +11,12 @@ if (isset($_GET['sex']) && $_GET['sex'] !== '') {
     $sex = $_GET['sex'];
 } else {
     $sex = null;
+}
+
+if (isset($_GET['page'])) {
+    $page = $_GET['page'];
+} else {
+    $page = 1;
 }
 
 //データベース接続
@@ -25,16 +33,16 @@ try {
 
 $sql = "SELECT * FROM employees WHERE 1 = 1 ";
 
-$stmt = $pdo->query($sql);
-
-$employees = $stmt->fetchAll();
-
 if ($name !== null) {
     $sql = $sql . "and ((name like :name) or (name_kana like :name)) ";
 }
 if ($sex !== null) {
     $sql = $sql . "and sex = :sex ";
 }
+
+$start_no = (5 * $page) - 5;
+$sql = $sql . "limit 5 offset {$start_no}";
+
 
 $stmt = $pdo->prepare($sql);
 
@@ -58,6 +66,54 @@ if (empty($employees)) {
     $errors[] = '該当する社員がいません';
 }
 
+$sql = "SELECT * FROM employees WHERE 1 = 1 ";
+
+if ($name !== null) {
+    $sql = $sql . "and ((name like :name) or (name_kana like :name)) ";
+}
+if ($sex !== null) {
+    $sql = $sql . "and sex = :sex ";
+}
+
+$stmt = $pdo->prepare($sql);
+
+var_dump($sql);
+
+if ($name) {
+    $value = '%' . $name . '%';
+    $stmt->bindParam(":name", $value, PDO::PARAM_STR);
+}
+if ($sex !== null) {
+    $stmt->bindParam(":sex", $sex, PDO::PARAM_STR);
+}
+
+$res = $stmt->execute();
+
+if ($res) {
+    $employeesAll = $stmt->fetchAll();
+}
+
+// トータルデータ件数
+$employeesAll_num = count($employeesAll);
+var_dump($employeesAll_num);
+
+/*
+//トータルページ数
+$max_page = ceil($employees_num / MAX);
+
+// 現在のページ数
+if (!isset($_GET['page_id'])) {
+    $now = 1;
+} else {
+    $now = $_GET['page_id'];
+}
+
+//何番目から取得
+$start_no = ($now - 1) * MAX;
+
+//何番目から何番目までかを切り取る
+$disp_data = array_slice($employees, $start_no, MAX, true);
+*/
 $stmt = null;
 $pdo = null;
 
@@ -110,32 +166,39 @@ $pdo = null;
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($employees as $employee) : ?>
+                        <?php foreach ($employees as $val) : ?>
                             <tr>
-                                <td><?php echo $employee['name']; ?></td>
-                                <td><?php echo $employee['name_kana']; ?></td>
+                                <td><?php echo $val['name']; ?></td>
+                                <td><?php echo $val['name_kana']; ?></td>
                                 <td>
-                                    <?php if ($employee['sex'] === '0') : ?>
+                                    <?php if ($val['sex'] === '0') : ?>
                                         男
-                                    <?php elseif ($employee['sex'] === '1') : ?>
+                                    <?php elseif ($val['sex'] === '1') : ?>
                                         女
-                                    <?php elseif ($employee['sex'] === '2') : ?>
+                                    <?php elseif ($val['sex'] === '2') : ?>
                                         不明
                                     <?php endif; ?>
                                 </td>
                                 <td>
                                     <?php 
                                         $now = date('Ymd');
-                                        $birthday = str_replace("-", "", $employee['birthday']);
+                                        $birthday = str_replace("-", "", $val['birthday']);
                                         $age = floor(($now - $birthday) / 10000);
                                     ?>
                                     <?php echo $age; ?>
                                 </td>
-                                <td><?php echo $employee['birthday']; ?></td>
+                                <td><?php echo $val['birthday']; ?></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
                 </table>
+                <?php echo $employeesAll_num; ?>件中 1〜5 件目を表示
+                <a href="">前へ</a>
+                <a href="?page=1">1</a>
+                <a href="?page=2">2</a>
+                <a href="?page=3">3</a>
+                <a href="?page=4">4</a>
+                <a href="">次へ</a>
             <?php endif; ?>
         </div>
     </main>
