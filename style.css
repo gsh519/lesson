@@ -43,3 +43,41 @@ td {
 .not-click {
     pointer-events: none;
 }
+
+.form-area {
+    margin-bottom: 20px;
+}
+
+.form-input {
+    min-width: 180px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.form-area label {
+    display: block;
+    font-weight: bold;
+}
+
+.form-area label span {
+    margin-left: 5px;
+    font-size: 12px;
+    color:red;
+}
+
+.label {
+    margin-bottom: 5px;
+}
+
+.form-select {
+    padding: 5px;
+}
+
+.form-submit {
+    padding: 10px;
+    background-color: #333;
+    border: 1px solid #333;
+    color: #fff;
+    cursor: pointer;
+}
