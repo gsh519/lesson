@@ -39,3 +39,7 @@ th {
 td {
     padding: 5px;
 }
+
+.not-click {
+    pointer-events: none;
+}
