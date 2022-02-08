@@ -135,6 +135,7 @@ $pdo = null;
                             <th>性別</th>
                             <th>年齢</th>
                             <th>生年月日</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -160,6 +161,7 @@ $pdo = null;
                                     <?php echo $age; ?>
                                 </td>
                                 <td><?php echo $val['birthday']; ?></td>
+                                <td><a class="edit-button" href="./edit.php">編集</a></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>

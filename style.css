@@ -81,3 +81,29 @@ td {
     color: #fff;
     cursor: pointer;
 }
+
+.success-message {
+    color: #fff;
+    padding: 10px;
+    background-color: rgb(84 149 84);
+}
+
+.error-message {
+    list-style: none;
+    padding: 0;
+}
+
+.error-message li {
+    color: #fff;
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: rgb(255, 89, 89);
+}
+
+.edit-button {
+    display: block;
+    padding: 5px;
+    text-decoration: none;
+    background-color: #3f3f3f;
+    color: #fff;
+}
