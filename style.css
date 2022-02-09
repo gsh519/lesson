@@ -8,6 +8,11 @@ h1 {
     margin: 0;
 }
 
+ul {
+    list-style: none;
+    padding: 0;
+}
+
 main {
     max-width: 1080px;
     width: 100%;
@@ -89,11 +94,6 @@ td {
 }
 
 .error-message {
-    list-style: none;
-    padding: 0;
-}
-
-.error-message li {
     color: #fff;
     margin-bottom: 10px;
     padding: 10px;

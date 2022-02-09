@@ -161,7 +161,7 @@ $pdo = null;
                                     <?php echo $age; ?>
                                 </td>
                                 <td><?php echo $val['birthday']; ?></td>
-                                <td><a class="edit-button" href="./edit.php">編集</a></td>
+                                <td><a class="edit-button" href="./edit.php?id=<?php echo $val['id']; ?>">編集</a></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
