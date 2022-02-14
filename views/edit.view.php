@@ -32,12 +32,12 @@
                         <!-- 氏名 -->
                         <div class="form-area">
                             <label class="label" for="name">氏名<span>必須</span></label>
-                            <input required type="text" id="name" name="name" class="form-input" value="<?php if (isset($employee)) { echo $employee['name']; } ?>">
+                            <input required type="text" id="name" name="name" class="form-input" value="<?php echo $employee->name; ?>">
                         </div>
                         <!-- かな -->
                         <div class="form-area">
                             <label class="label" for="name_kana">かな<span>必須</span></label>
-                            <input required type="text" id="name_kana" name="name_kana" class="form-input" value="<?php if (isset($employee)) { echo $employee['name_kana']; } ?>">
+                            <input required type="text" id="name_kana" name="name_kana" class="form-input" value="<?php echo $employee->name_kana; ?>">
                         </div>
 
                         <!-- 性別 -->
@@ -45,28 +45,28 @@
                             <label class="label" for="sex">性別</label>
                             <select name="sex" id="sex" class="form-select">
                                 <option value="">選択</option>
-                                <option <?php if (isset($employee['sex'])) { if ($employee['sex'] === '0') { echo 'selected'; } } ?> value="0">男</option>
-                                <option <?php if (isset($employee['sex'])) { if ($employee['sex'] === '1') { echo 'selected'; } } ?> value="1">女</option>
-                                <option <?php if (isset($employee['sex'])) { if ($employee['sex'] === '2') { echo 'selected'; } } ?> value="2">不明</option>
+                                <option <?php if ($employee->sex === '0') { echo 'selected'; } ?> value="0">男</option>
+                                <option <?php if ($employee->sex === '1') { echo 'selected'; } ?> value="1">女</option>
+                                <option <?php if ($employee->sex === '2') { echo 'selected'; } ?> value="2">不明</option>
                             </select>
                         </div>
 
                         <!-- 生年月日 -->
                         <div class="form-area">
                             <label class="label" for="birthday">生年月日</label>
-                            <input type="date" id="birthday" name="birthday" class="form-input" value="<?php if (isset($employee)) { echo $employee['birthday']; } ?>">
+                            <input type="date" id="birthday" name="birthday" class="form-input" value="<?php echo $employee->birthday; ?>">
                         </div>
 
                         <!-- メールアドレス -->
                         <div class="form-area">
                             <label class="label" for="email">メールアドレス<span>必須</span></label>
-                            <input required type="email" id="email" name="email" class="form-input form-email" value="<?php if (isset($employee)) { echo $employee['email']; } ?>">
+                            <input required type="email" id="email" name="email" class="form-input form-email" value="<?php echo $employee->email; ?>">
                         </div>
 
                         <!-- 通勤時間 -->
                         <div class="form-area">
                             <label class="label" for="commute">通勤時間（分）</label>
-                            <input type="number" id="commute" name="commute" class="form-input form-commute" min="1" max="999" step="1" value="<?php if (isset($employee)) { echo $employee['commute']; } ?>">
+                            <input type="number" id="commute" name="commute" class="form-input form-commute" min="1" max="999" step="1" value="<?php echo $employee->commute; ?>">
                         </div>
 
                         <!-- 血液型 -->
@@ -74,23 +74,23 @@
                             <label>血液型<span>必須</span></label>
                             <div class="blood-type">
                                 <div>
-                                    <input <?php if (isset($employee['blood_type'])) { if ($employee['blood_type'] === '1') { echo 'checked'; } } ?> required type="radio" id="a" name="blood_type" value="1">
+                                    <input <?php if ($employee->blood_type === '1') { echo 'checked'; } ?> required type="radio" id="a" name="blood_type" value="1">
                                     <label for="a">A型</label>
                                 </div>
                                 <div>
-                                    <input <?php if (isset($employee['blood_type'])) { if ($employee['blood_type'] === '2') { echo 'checked'; } } ?> required  type="radio" id="b" name="blood_type" value="2">
+                                    <input <?php if ($employee->blood_type === '2') { echo 'checked'; } ?> required  type="radio" id="b" name="blood_type" value="2">
                                     <label for="b">B型</label>
                                 </div>
                                 <div>
-                                    <input <?php if (isset($employee['blood_type'])) { if ($employee['blood_type'] === '3') { echo 'checked'; } } ?> required type="radio" id="o" name="blood_type" value="3">
+                                    <input <?php if ($employee->blood_type === '3') { echo 'checked'; } ?> required type="radio" id="o" name="blood_type" value="3">
                                     <label for="o">O型</label>
                                 </div>
                                 <div>
-                                    <input <?php if (isset($employee['blood_type'])) { if ($employee['blood_type'] === '4') { echo 'checked'; } } ?> required type="radio" id="ab" name="blood_type" value="4">
+                                    <input <?php if ($employee->blood_type === '4') { echo 'checked'; } ?> required type="radio" id="ab" name="blood_type" value="4">
                                     <label for="ab">AB型</label>
                                 </div>
                                 <div>
-                                    <input <?php if (isset($employee['blood_type'])) { if ($employee['blood_type'] === '0') { echo 'checked'; } } ?> required type="radio" id="not" name="blood_type" value="0">
+                                    <input <?php if ($employee->blood_type === '0') { echo 'checked'; } ?> required type="radio" id="not" name="blood_type" value="0">
                                     <label for="not">不明</label>
                                 </div>
                             </div>
@@ -100,7 +100,7 @@
                         <div class="form-area">
                             <label class="label" for="married">既婚</label>
                             <div class="married">
-                                <input <?php if (isset($employee['married'])) { if ($employee['married'] === '1') { echo 'checked'; } } ?> type="checkbox" id="married" name="married" value="1">
+                                <input <?php if ($employee->married === '1') { echo 'checked'; } ?> type="checkbox" id="married" name="married" value="1">
                                 <label for="married">既婚</label>
                             </div>
                         </div>

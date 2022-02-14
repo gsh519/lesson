@@ -15,13 +15,13 @@
         <div class="serch-form">
             <form action="" method="get">
                 <label for="name">氏名</label>
-                <input type="text" name="name" id="name" value="<?php if (isset($employee['name'])) { echo $employee['name']; } ?>">
+                <input type="text" name="name" id="name" value="<?php if (isset($search['name'])) { echo $search['name']; } ?>">
                 <label for="sex">性別</label>
                 <select name="sex" id="sex">
                     <option value="">全て</option>
-                    <option <?php if (isset($employee['sex'])) { if ($employee['sex'] === '0') { echo 'selected'; }} ?> value="0">男</option>
-                    <option <?php if (isset($employee['sex'])) { if ($employee['sex'] === '1') { echo 'selected'; }} ?> value="1">女</option>
-                    <option <?php if (isset($employee['sex'])) { if ($employee['sex'] === '2') { echo 'selected'; }} ?> value="2">不明</option>
+                    <option <?php if ($search['sex'] === '0') { echo 'selected'; } ?> value="0">男</option>
+                    <option <?php if ($search['sex'] === '1') { echo 'selected'; } ?> value="1">女</option>
+                    <option <?php if ($search['sex'] === '2') { echo 'selected'; } ?> value="2">不明</option>
                 </select>
                 <button type="submit">検索</button>
             </form>
@@ -52,36 +52,38 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($employees as $val) : ?>
+                        <?php foreach ($employees as $employee) : ?>
                             <tr>
                                 <!-- 氏名 -->
-                                <td><?php echo $val['name']; ?></td>
+                                <td><?php echo $employee->name; ?></td>
                                 <!-- かな -->
-                                <td><?php echo $val['name_kana']; ?></td>
+                                <td><?php echo $employee->name_kana; ?></td>
                                 <!-- 性別 -->
-                                <td><?php echo $val['gender']; ?></td>
+                                <td><?php echo $employee->getSexLabel(); ?></td>
                                 <!-- 年齢 -->
-                                <td><?php echo $val['age']; ?></td>
+                                <td><?php echo $employee->getAge(); ?></td>
                                 <!-- 生年月日 -->
-                                <td><?php echo $val['birthday']; ?></td>
+                                <td><?php echo $employee->birthday; ?></td>
                                 <!-- メールアドレス -->
-                                <td><?php echo $val['email']; ?></td> 
+                                <td><?php echo $employee->email; ?></td> 
                                 <!-- 通勤時間 -->
-                                <td><?php echo $val['commute']; ?></td> 
+                                <td><?php echo $employee->getCommute(); ?></td> 
                                 <!-- 血液型 -->
-                                <td><?php echo $val['blood_type']; ?></td> 
+                                <td><?php echo $employee->getBlood_type(); ?></td> 
                                 <!-- 既婚 -->
-                                <td><?php echo $val['married']; ?></td> 
+                                <td><?php echo $employee->getMarried(); ?></td> 
                                 
-                                <td><a class="edit-button" href="./edit.php?id=<?php echo $val['id']; ?>">編集</a></td>
+                                <td><a class="edit-button" href="./edit.php?id=<?php echo $employee->id; ?>">編集</a></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
                 </table>
+                
+                <!-- ページネーション -->
                 <?php echo $employeesAll_num; ?>件中 <?php echo $from; ?>-<?php echo $to; ?>件目を表示
                 <?php if ($pagenum >= 2) : ?>
                     <?php if ($page >= 2) : ?>
-                        <a href="?page=<?php echo ($page - 1); ?>&name=<?php echo $employee['name']; ?>&sex=<?php echo $employee['sex']; ?>">前へ</a>
+                        <a href="?page=<?php echo ($page - 1); ?>&name=<?php echo $search['name']; ?>&sex=<?php echo $search['sex']; ?>">前へ</a>
                     <?php else : ?>
                         <a class="not-click">前へ</a>
                     <?php endif; ?>
@@ -90,12 +92,12 @@
                             <?php if ($i == $page) : ?>
                                 <a class="not-click"><?php echo $i; ?></a>
                             <?php else : ?>
-                                <a href="?page=<?php echo $i; ?>&name=<?php echo $employee['name']; ?>&sex=<?php echo $employee['sex']; ?>"><?php echo $i; ?></a>
+                                <a href="?page=<?php echo $i; ?>&name=<?php echo $search['name']; ?>&sex=<?php echo $search['sex']; ?>"><?php echo $i; ?></a>
                             <?php endif; ?>
                         <?php endif; ?>
                     <?php endfor; ?>
                     <?php if ($page < $pagenum) : ?>
-                        <a href="?page=<?php echo ($page + 1); ?>&name=<?php echo $employee['name']; ?>&sex=<?php echo $employee['sex']; ?>">次へ</a>
+                        <a href="?page=<?php echo ($page + 1); ?>&name=<?php echo $search['name']; ?>&sex=<?php echo $search['sex']; ?>">次へ</a>
                     <?php else : ?>
                         <a class="not-click">次へ</a>
                     <?php endif; ?>

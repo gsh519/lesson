@@ -1,20 +1,15 @@
 <?php
+require('./entities/employee.php');
 
 $errors = [];
-$employee['name'] = null;
-$employee['name_kana'] = null;
-$employee['sex'] = null;
-$employee['birthday'] = null;
-$employee['email'] = null;
-$employee['commute'] = null;
-$employee['blood_type'] = null;
-$employee['married'] = null;
+$search['name'] = null;
+$search['sex'] = null;
 
 if (isset($_GET['name']) && $_GET['name'] !== '') {
-    $employee['name'] = $_GET['name'];
+    $search['name'] = $_GET['name'];
 }
 if (isset($_GET['sex']) && $_GET['sex'] !== '') {
-    $employee['sex'] = $_GET['sex'];
+    $search['sex'] = $_GET['sex'];
 }
 if (isset($_GET['page'])) {
     $page = $_GET['page'];
@@ -38,17 +33,17 @@ $sql_where = "WHERE 1 = 1 ";
 $param = array();
 
 //検索条件
-if ($employee['name'] !== null) {
+if ($search['name'] !== null) {
     $sql_where = $sql_where . "and ((name like :name) or (name_kana like :name)) ";
 
-    $value = '%' . $employee['name'] . '%';
+    $value = '%' . $search['name'] . '%';
     $param[":name"] = $value;
 }
 
-if ($employee['sex'] !== null) {
+if ($search['sex'] !== null) {
     $sql_where = $sql_where . "and sex = :sex ";
 
-    $param[":sex"] = $employee['sex'];
+    $param[":sex"] = $search['sex'];
 }
 
 
@@ -61,53 +56,17 @@ $stmt = $pdo->prepare($sql);
 $res = $stmt->execute($param);
 
 if ($res) {
-    $employees = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $employees_arrays = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-if (empty($employees)) {
+if (empty($employees_arrays)) {
     $errors[] = '該当する社員がいません';
 }
 
-foreach ($employees as $index => $val) {
-    // 年齢
-    $now = date('Ymd');
-    $employee['birthday'] = str_replace("-", "", $val['birthday']);
-    $age = floor(($now - $employee['birthday']) / 10000);
-    $employees[$index]['age'] = $age;
-
-    // 性別
-    if ($val['sex'] === '0') {
-        $employees[$index]['gender'] = '男';
-    } elseif ($val['sex'] === '1') {
-        $employees[$index]['gender'] = '女';
-    } elseif ($val['sex'] == '2') {
-        $employees[$index]['gender'] = '不明';
-    }
-
-    // 通勤時間
-    if (isset($val['commute']) && $val['commute'] !== '') {
-        $employees[$index]['commute'] = $val['commute'] . '分';
-    }
-
-    // 血液型
-    if ($val['blood_type'] === '0') {
-        $employees[$index]['blood_type'] = '不明';
-    } elseif ($val['blood_type'] === '1') {
-        $employees[$index]['blood_type'] = 'A型';
-    } elseif ($val['blood_type'] === '2') {
-        $employees[$index]['blood_type'] = 'B型';
-    } elseif ($val['blood_type'] === '3') {
-        $employees[$index]['blood_type'] = 'O型';
-    } elseif ($val['blood_type'] === '4') {
-        $employees[$index]['blood_type'] = 'AB型';
-    }
-
-    //既婚
-    if ($val['married'] === null || $val['married'] === '0') {
-        $employees[$index]['married'] = '未婚';
-    } elseif ($val['married'] === '1') {
-        $employees[$index]['married'] = '既婚';
-    }
+$employees = [];
+foreach ($employees_arrays as $index => $employee_array) {
+    $employee = new Employee($employee_array);
+    $employees[] = $employee;
 }
 
 //全件数取得
