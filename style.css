@@ -60,6 +60,14 @@ td {
     border-radius: 5px;
 }
 
+.form-email {
+    min-width: 340px !important;
+}
+
+.form-commute {
+    min-width: 20px;
+}
+
 .form-area label {
     display: block;
     font-weight: bold;
@@ -106,4 +114,25 @@ td {
     text-decoration: none;
     background-color: #3f3f3f;
     color: #fff;
+}
+
+.blood-type {
+    display: flex;
+}
+
+.blood-type div {
+    margin-right: 5px;
+}
+
+.blood-type label {
+    display: inline;
+}
+
+.married {
+    display: flex;
+    align-items: center;
+}
+
+.married label {
+    font-weight: normal;
 }

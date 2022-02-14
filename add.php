@@ -1,35 +1,63 @@
 <?php
+session_start();
 $success_msg = [];
 $errors = [];
-session_start();
+$employee['name'] = null;
+$employee['name_kana'] = null;
+$employee['sex'] = null;
+$employee['birthday'] = null;
+$employee['email'] = null;
+$employee['commute'] = null;
+$employee['blood_type'] = null;
+$employee['married'] = null;
 
-$name = null;
-$name_kana = null;
-$sex = null;
-$birthday = null;
-
+// 登録ボタン処理
 if (!empty($_POST['add'])) {
 
+    // var_dump($_POST);die;
+
     if (isset($_POST['name']) && $_POST['name'] !== '') {
-        $name = $_POST['name'];
+        $employee['name'] = $_POST['name'];
     }
     if (isset($_POST['name_kana']) && $_POST['name_kana'] !== '') {
-        $name_kana = $_POST['name_kana'];
+        $employee['name_kana'] = $_POST['name_kana'];
     }
     if (isset($_POST['sex']) && $_POST['sex'] !== '') {
-        $sex = $_POST['sex'];
+        $employee['sex'] = $_POST['sex'];
     }
     if (isset($_POST['birthday']) && $_POST['birthday'] !== '') {
-        $birthday = $_POST['birthday'];
+        $employee['birthday'] = $_POST['birthday'];
+    }
+    if (isset($_POST['email']) && $_POST['email'] !== '') {
+        $employee['email'] = $_POST['email'];
+    }
+    if (isset($_POST['commute']) && $_POST['commute'] !== '') {
+        $employee['commute'] = $_POST['commute'];
+    }
+    if (isset($_POST['blood_type']) && $_POST['blood_type'] !== '') {
+        $employee['blood_type'] = $_POST['blood_type'];
+    }
+    if (isset($_POST['married']) && $_POST['married'] !== '') {
+        $employee['married'] = $_POST['married'];
     }
 
-    if ($name === null) {
+    if ($employee['name'] === null) {
         $errors[] = '氏名は必須です';
     }
-    if ($name_kana === null) {
+    if ($employee['name_kana'] === null) {  
         $errors[] = 'かなは必須です';
     }
-
+    if ($employee['email'] === null) {
+        $errors[] = 'メールアドレスは必須です';
+    } elseif (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+        $errors[] = 'メールアドレスの形式が間違っています';
+    }
+    if ($employee['commute'] <= 0) {
+        $errors[] = '通勤時間は1以上にしてください';
+    }
+    if ($employee['blood_type'] === null) {
+        $errors[] = '血液型は必須です';
+    }
 
     if (empty($errors)) {
         //データベース接続
@@ -43,12 +71,17 @@ if (!empty($_POST['add'])) {
             $errors[] = $e->getMessage();
         }
 
-        $sql = "INSERT INTO employees (name, name_kana, sex, birthday) VALUES (:name, :name_kana, :sex, :birthday)";
+        // データベースに登録
+        $sql = "INSERT INTO employees (name, name_kana, sex, birthday, email, commute, blood_type, married) VALUES (:name, :name_kana, :sex, :birthday, :email, :commute, :blood_type, :married)";
         $stmt = $pdo->prepare($sql);
-        $stmt->bindParam(':name', $name, PDO::PARAM_STR);
-        $stmt->bindParam(':name_kana', $name_kana, PDO::PARAM_STR);
-        $stmt->bindParam(':sex', $sex, PDO::PARAM_STR);
-        $stmt->bindParam(':birthday', $birthday, PDO::PARAM_STR);
+        $stmt->bindParam(':name', $employee['name'], PDO::PARAM_STR);
+        $stmt->bindParam(':name_kana', $employee['name_kana'], PDO::PARAM_STR);
+        $stmt->bindParam(':sex', $employee['sex'], PDO::PARAM_STR);
+        $stmt->bindParam(':birthday', $employee['birthday'], PDO::PARAM_STR);
+        $stmt->bindParam(':email', $employee['email'], PDO::PARAM_STR);
+        $stmt->bindParam(':commute', $employee['commute'], PDO::PARAM_STR);
+        $stmt->bindParam(':blood_type', $employee['blood_type'], PDO::PARAM_STR);
+        $stmt->bindParam(':married', $employee['married'], PDO::PARAM_STR);
 
         $res = $stmt->execute();
 
@@ -63,74 +96,5 @@ if (!empty($_POST['add'])) {
         exit;
     }
 }
-
+require("./views/add.view.php");
 ?>
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>社員登録</title>
-    <link rel="stylesheet" href="./style.css">
-</head>
-<body>
-    <main>
-        <!-- 成功メッセージ -->
-        <?php if (empty($_POST['add']) && !empty($_SESSION['success_msg'])) : ?>
-            <p class="success-message"><?php echo $_SESSION['success_msg']; ?></p>
-            <?php unset($_SESSION['success_msg']); ?>
-        <?php endif; ?>
-
-        <h1 class="title">社員登録</h1>
-        <div class="content">
-            <!-- エラーメッセージ表示 -->
-            <?php if (!empty($errors)) : ?>
-                <ul class="error-message">
-                    <?php foreach ($errors as $error) : ?>
-                        <li>・<?php echo $error; ?></li>
-                    <?php endforeach ?>
-                </ul>
-            <?php endif; ?>
-            <div class="add-form">
-                <form action="" method="post">
-
-                    <!-- 氏名 -->
-                    <div class="form-area">
-                        <label class="label" for="name">氏名<span>必須</span></label>
-                        <input required type="text" id="name" name="name" class="form-input" value="<?php echo $name; ?>">
-                    </div>
-
-                    <!-- かな -->
-                    <div class="form-area">
-                        <label class="label" for="name_kana">かな<span>必須</span></label>
-                        <input required type="text" id="name_kana" name="name_kana" class="form-input" value="<?php echo $name_kana; ?>">
-                    </div>
-
-                    <!-- 性別 -->
-                    <div class="form-area">
-                        <label class="label" for="sex">性別</label>
-                        <select name="sex" id="sex" class="form-select">
-                            <option value="">選択</option>
-                            <option <?php if ($sex === '0') { echo 'selected'; } ?> value="0">男</option>
-                            <option <?php if ($sex === '1') { echo 'selected'; } ?> value="1">女</option>
-                            <option <?php if ($sex === '2') { echo 'selected'; } ?> value="2">不明</option>
-                        </select>
-                    </div>
-
-                    <!-- 生年月日 -->
-                    <div class="form-area">
-                        <label class="label" for="birthday">生年月日</label>
-                        <input type="date" id="birthday" name="birthday" class="form-input" value="<?php echo $birthday; ?>">
-                    </div>
-
-                    <!-- 登録ボタン -->
-                    <div class="form-area">
-                        <input type="submit" name="add" class="form-submit" value="登録">
-                    </div>
-                </form>
-            </div>
-        </div>
-    </main>
-</body>
-</html>

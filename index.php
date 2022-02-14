@@ -1,18 +1,21 @@
 <?php
 
 $errors = [];
+$employee['name'] = null;
+$employee['name_kana'] = null;
+$employee['sex'] = null;
+$employee['birthday'] = null;
+$employee['email'] = null;
+$employee['commute'] = null;
+$employee['blood_type'] = null;
+$employee['married'] = null;
 
 if (isset($_GET['name']) && $_GET['name'] !== '') {
-    $name = $_GET['name'];
-} else {
-    $name = null;
+    $employee['name'] = $_GET['name'];
 }
 if (isset($_GET['sex']) && $_GET['sex'] !== '') {
-    $sex = $_GET['sex'];
-} else {
-    $sex = null;
+    $employee['sex'] = $_GET['sex'];
 }
-
 if (isset($_GET['page'])) {
     $page = $_GET['page'];
 } else {
@@ -34,17 +37,18 @@ try {
 $sql_where = "WHERE 1 = 1 ";
 $param = array();
 
-if ($name !== null) {
+//検索条件
+if ($employee['name'] !== null) {
     $sql_where = $sql_where . "and ((name like :name) or (name_kana like :name)) ";
 
-    $value = '%' . $name . '%';
+    $value = '%' . $employee['name'] . '%';
     $param[":name"] = $value;
 }
 
-if ($sex !== null) {
+if ($employee['sex'] !== null) {
     $sql_where = $sql_where . "and sex = :sex ";
 
-    $param[":sex"] = $sex;
+    $param[":sex"] = $employee['sex'];
 }
 
 
@@ -57,11 +61,53 @@ $stmt = $pdo->prepare($sql);
 $res = $stmt->execute($param);
 
 if ($res) {
-    $employees = $stmt->fetchAll();
+    $employees = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 if (empty($employees)) {
     $errors[] = '該当する社員がいません';
+}
+
+foreach ($employees as $index => $val) {
+    // 年齢
+    $now = date('Ymd');
+    $employee['birthday'] = str_replace("-", "", $val['birthday']);
+    $age = floor(($now - $employee['birthday']) / 10000);
+    $employees[$index]['age'] = $age;
+
+    // 性別
+    if ($val['sex'] === '0') {
+        $employees[$index]['gender'] = '男';
+    } elseif ($val['sex'] === '1') {
+        $employees[$index]['gender'] = '女';
+    } elseif ($val['sex'] == '2') {
+        $employees[$index]['gender'] = '不明';
+    }
+
+    // 通勤時間
+    if (isset($val['commute']) && $val['commute'] !== '') {
+        $employees[$index]['commute'] = $val['commute'] . '分';
+    }
+
+    // 血液型
+    if ($val['blood_type'] === '0') {
+        $employees[$index]['blood_type'] = '不明';
+    } elseif ($val['blood_type'] === '1') {
+        $employees[$index]['blood_type'] = 'A型';
+    } elseif ($val['blood_type'] === '2') {
+        $employees[$index]['blood_type'] = 'B型';
+    } elseif ($val['blood_type'] === '3') {
+        $employees[$index]['blood_type'] = 'O型';
+    } elseif ($val['blood_type'] === '4') {
+        $employees[$index]['blood_type'] = 'AB型';
+    }
+
+    //既婚
+    if ($val['married'] === null || $val['married'] === '0') {
+        $employees[$index]['married'] = '未婚';
+    } elseif ($val['married'] === '1') {
+        $employees[$index]['married'] = '既婚';
+    }
 }
 
 //全件数取得
@@ -89,107 +135,5 @@ if ($page == $pagenum) {
 $stmt = null;
 $pdo = null;
 
+require("./views/index.view.php");
 ?>
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>社員一覧</title>
-    <link rel="stylesheet" href="./style.css">
-</head>
-<body>
-    <main>
-        <h1 class="title">社員一覧</h1>
-
-        <!-- 検索フォーム -->
-        <div class="serch-form">
-            <form action="" method="get">
-                <label for="name">氏名</label>
-                <input type="text" name="name" id="name" value="<?php if (isset($name)) { echo $name; } ?>">
-                <label for="sex">性別</label>
-                <select name="sex" id="sex">
-                    <option value="">全て</option>
-                    <option <?php if (isset($sex)) { if ($sex === '0') { echo 'selected'; }} ?> value="0">男</option>
-                    <option <?php if (isset($sex)) { if ($sex === '1') { echo 'selected'; }} ?> value="1">女</option>
-                    <option <?php if (isset($sex)) { if ($sex === '2') { echo 'selected'; }} ?> value="2">不明</option>
-                </select>
-                <button type="submit">検索</button>
-            </form>
-        </div>
-
-        <div class="content">
-            <?php if (!empty($errors)) : ?>
-                <ul>
-                    <?php foreach ($errors as $error) : ?>
-                        <li><?php echo $error; ?></li>
-                    <?php endforeach ?>
-                </ul>
-            <?php elseif (empty($errors)) : ?>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>氏名</th>
-                            <th>かな</th>
-                            <th>性別</th>
-                            <th>年齢</th>
-                            <th>生年月日</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($employees as $val) : ?>
-                            <tr>
-                                <td><?php echo $val['name']; ?></td>
-                                <td><?php echo $val['name_kana']; ?></td>
-                                <td>
-                                    <?php if ($val['sex'] === '0') : ?>
-                                        男
-                                    <?php elseif ($val['sex'] === '1') : ?>
-                                        女
-                                    <?php elseif ($val['sex'] === '2') : ?>
-                                        不明
-                                    <?php endif; ?>
-                                </td>
-                                <td>
-                                    <?php 
-                                        $now = date('Ymd');
-                                        $birthday = str_replace("-", "", $val['birthday']);
-                                        $age = floor(($now - $birthday) / 10000);
-                                    ?>
-                                    <?php echo $age; ?>
-                                </td>
-                                <td><?php echo $val['birthday']; ?></td>
-                                <td><a class="edit-button" href="./edit.php?id=<?php echo $val['id']; ?>">編集</a></td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-                <?php echo $employeesAll_num; ?>件中 <?php echo $from; ?>-<?php echo $to; ?>件目を表示
-                <?php if ($pagenum >= 2) : ?>
-                    <?php if ($page >= 2) : ?>
-                        <a href="?page=<?php echo ($page - 1); ?>&name=<?php echo $name; ?>&sex=<?php echo $sex; ?>">前へ</a>
-                    <?php else : ?>
-                        <a class="not-click">前へ</a>
-                    <?php endif; ?>
-                    <?php for ($i = $page - 2; $i < ($page + 3); $i++) : ?>
-                        <?php if ($i >= 1 && $i <= $pagenum) : ?>
-                            <?php if ($i == $page) : ?>
-                                <a class="not-click"><?php echo $i; ?></a>
-                            <?php else : ?>
-                                <a href="?page=<?php echo $i; ?>&name=<?php echo $name; ?>&sex=<?php echo $sex; ?>"><?php echo $i; ?></a>
-                            <?php endif; ?>
-                        <?php endif; ?>
-                    <?php endfor; ?>
-                    <?php if ($page < $pagenum) : ?>
-                        <a href="?page=<?php echo ($page + 1); ?>&name=<?php echo $name; ?>&sex=<?php echo $sex; ?>">次へ</a>
-                    <?php else : ?>
-                        <a class="not-click">次へ</a>
-                    <?php endif; ?>
-                <?php endif; ?>
-            <?php endif; ?>
-        </div>
-    </main>
-</body>
-</html>
