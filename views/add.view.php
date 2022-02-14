@@ -31,13 +31,13 @@
                     <!-- 氏名 -->
                     <div class="form-area">
                         <label class="label" for="name">氏名<span>必須</span></label>
-                        <input required type="text" id="name" name="name" class="form-input" value="<?php echo $employee->name;?>">
+                        <input required type="text" id="name" name="name" class="form-input" value="<?php echo htmlspecialchars($employee->name, ENT_QUOTES);?>">
                     </div>
 
                     <!-- かな -->
                     <div class="form-area">
                         <label class="label" for="name_kana">かな<span>必須</span></label>
-                        <input required type="text" id="name_kana" name="name_kana" class="form-input" value="<?php echo $employee->name_kana; ?>">
+                        <input required type="text" id="name_kana" name="name_kana" class="form-input" value="<?php echo htmlspecialchars($employee->name_kana, ENT_QUOTES); ?>">
                     </div>
 
                     <!-- 性別 -->
@@ -54,19 +54,19 @@
                     <!-- 生年月日 -->
                     <div class="form-area">
                         <label class="label" for="birthday">生年月日</label>
-                        <input type="date" id="birthday" name="birthday" class="form-input" value="<?php echo $employee->birthday; ?>">
+                        <input type="date" id="birthday" name="birthday" class="form-input" value="<?php echo htmlspecialchars($employee->birthday, ENT_QUOTES); ?>">
                     </div>
 
                     <!-- メールアドレス -->
                     <div class="form-area">
                         <label class="label" for="email">メールアドレス<span>必須</span></label>
-                        <input required type="email" id="email" name="email" class="form-input form-email" value="<?php echo $employee->email; ?>">
+                        <input required type="email" id="email" name="email" class="form-input form-email" value="<?php echo htmlspecialchars($employee->email, ENT_QUOTES); ?>">
                     </div>
 
                     <!-- 通勤時間 -->
                     <div class="form-area">
                         <label class="label" for="commute">通勤時間（分）</label>
-                        <input type="number" id="commute" name="commute" class="form-input form-commute" min="1" max="999" step="1" value="<?php echo $employee->commute;; ?>">
+                        <input type="number" id="commute" name="commute" class="form-input form-commute" min="1" max="999" step="1" value="<?php echo htmlspecialchars($employee->commute, ENT_QUOTES); ?>">
                     </div>
 
                     <!-- 血液型 -->

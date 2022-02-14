@@ -15,7 +15,7 @@
         <div class="serch-form">
             <form action="" method="get">
                 <label for="name">氏名</label>
-                <input type="text" name="name" id="name" value="<?php if (isset($search['name'])) { echo $search['name']; } ?>">
+                <input type="text" name="name" id="name" value="<?php if (isset($search['name'])) { echo htmlspecialchars($search['name'], ENT_QUOTES); } ?>">
                 <label for="sex">性別</label>
                 <select name="sex" id="sex">
                     <option value="">全て</option>
@@ -55,25 +55,25 @@
                         <?php foreach ($employees as $employee) : ?>
                             <tr>
                                 <!-- 氏名 -->
-                                <td><?php echo $employee->name; ?></td>
+                                <td><?php echo htmlspecialchars($employee->name, ENT_QUOTES); ?></td>
                                 <!-- かな -->
-                                <td><?php echo $employee->name_kana; ?></td>
+                                <td><?php echo htmlspecialchars($employee->name_kana, ENT_QUOTES); ?></td>
                                 <!-- 性別 -->
-                                <td><?php echo $employee->getSexLabel(); ?></td>
+                                <td><?php echo htmlspecialchars($employee->getSexLabel(), ENT_QUOTES); ?></td>
                                 <!-- 年齢 -->
-                                <td><?php echo $employee->getAge(); ?></td>
+                                <td><?php echo htmlspecialchars($employee->getAge(), ENT_QUOTES); ?></td>
                                 <!-- 生年月日 -->
-                                <td><?php echo $employee->birthday; ?></td>
+                                <td><?php echo htmlspecialchars($employee->birthday, ENT_QUOTES); ?></td>
                                 <!-- メールアドレス -->
-                                <td><?php echo $employee->email; ?></td> 
+                                <td><?php echo htmlspecialchars($employee->email, ENT_QUOTES); ?></td> 
                                 <!-- 通勤時間 -->
-                                <td><?php echo $employee->getCommute(); ?></td> 
+                                <td><?php echo htmlspecialchars($employee->getCommute(), ENT_QUOTES); ?></td> 
                                 <!-- 血液型 -->
-                                <td><?php echo $employee->getBlood_type(); ?></td> 
+                                <td><?php echo htmlspecialchars($employee->getBlood_type(), ENT_QUOTES); ?></td> 
                                 <!-- 既婚 -->
-                                <td><?php echo $employee->getMarried(); ?></td> 
+                                <td><?php echo htmlspecialchars($employee->getMarried(), ENT_QUOTES); ?></td> 
                                 
-                                <td><a class="edit-button" href="./edit.php?id=<?php echo $employee->id; ?>">編集</a></td>
+                                <td><a class="edit-button" href="./edit.php?id=<?php echo htmlspecialchars($employee->id, ENT_QUOTES); ?>">編集</a></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
@@ -83,7 +83,7 @@
                 <?php echo $employeesAll_num; ?>件中 <?php echo $from; ?>-<?php echo $to; ?>件目を表示
                 <?php if ($pagenum >= 2) : ?>
                     <?php if ($page >= 2) : ?>
-                        <a href="?page=<?php echo ($page - 1); ?>&name=<?php echo $search['name']; ?>&sex=<?php echo $search['sex']; ?>">前へ</a>
+                        <a href="?page=<?php echo ($page - 1); ?>&name=<?php echo htmlspecialchars($search['name'], ENT_QUOTES); ?>&sex=<?php echo htmlspecialchars($search['sex'], ENT_QUOTES); ?>">前へ</a>
                     <?php else : ?>
                         <a class="not-click">前へ</a>
                     <?php endif; ?>
@@ -92,12 +92,12 @@
                             <?php if ($i == $page) : ?>
                                 <a class="not-click"><?php echo $i; ?></a>
                             <?php else : ?>
-                                <a href="?page=<?php echo $i; ?>&name=<?php echo $search['name']; ?>&sex=<?php echo $search['sex']; ?>"><?php echo $i; ?></a>
+                                <a href="?page=<?php echo $i; ?>&name=<?php echo htmlspecialchars($search['name'], ENT_QUOTES); ?>&sex=<?php echo htmlspecialchars($search['sex'], ENT_QUOTES); ?>"><?php echo $i; ?></a>
                             <?php endif; ?>
                         <?php endif; ?>
                     <?php endfor; ?>
                     <?php if ($page < $pagenum) : ?>
-                        <a href="?page=<?php echo ($page + 1); ?>&name=<?php echo $search['name']; ?>&sex=<?php echo $search['sex']; ?>">次へ</a>
+                        <a href="?page=<?php echo ($page + 1); ?>&name=<?php echo htmlspecialchars($search['name'], ENT_QUOTES); ?>&sex=<?php echo htmlspecialchars($search['sex'], ENT_QUOTES); ?>">次へ</a>
                     <?php else : ?>
                         <a class="not-click">次へ</a>
                     <?php endif; ?>
