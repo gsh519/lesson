@@ -2,11 +2,22 @@
 require('./entities/employee.php');
 
 session_start();
+
 $success_msg = [];
 $errors = [];
 
+
 // 登録ボタン処理
 if (!empty($_POST['add'])) {
+
+    // トークンチェック
+    if (
+        empty($_POST['token'])
+        || empty($_SESSION['token'])
+        || $_POST['token'] !== $_SESSION['token']
+    ) {
+        $errors[] = 'トークンが一致しません';
+    }
 
     $employee = new Employee($_POST);
 
@@ -67,6 +78,10 @@ if (!empty($_POST['add'])) {
 } else {
     $employee = new Employee();
 }
+
+//トークンの生成
+$token = bin2hex(openssl_random_pseudo_bytes(16));
+$_SESSION['token'] = $token;
 
 require("./views/add.view.php");
 ?>

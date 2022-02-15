@@ -32,7 +32,7 @@
             <?php if (!empty($errors)) : ?>
                 <ul>
                     <?php foreach ($errors as $error) : ?>
-                        <li><?php echo $error; ?></li>
+                        <li><?php echo htmlspecialchars($error, ENT_QUOTES); ?></li>
                     <?php endforeach ?>
                 </ul>
             <?php elseif (empty($errors)) : ?>
@@ -80,24 +80,24 @@
                 </table>
                 
                 <!-- ページネーション -->
-                <?php echo $employeesAll_num; ?>件中 <?php echo $from; ?>-<?php echo $to; ?>件目を表示
+                <?php echo htmlspecialchars($employeesAll_num, ENT_QUOTES); ?>件中 <?php echo htmlspecialchars($from, ENT_QUOTES); ?>-<?php echo htmlspecialchars($to, ENT_QUOTES); ?>件目を表示
                 <?php if ($pagenum >= 2) : ?>
                     <?php if ($page >= 2) : ?>
-                        <a href="?page=<?php echo ($page - 1); ?>&name=<?php echo htmlspecialchars($search['name'], ENT_QUOTES); ?>&sex=<?php echo htmlspecialchars($search['sex'], ENT_QUOTES); ?>">前へ</a>
+                        <a href="?page=<?php echo htmlspecialchars(($page - 1), ENT_QUOTES); ?>&name=<?php echo htmlspecialchars($search['name'], ENT_QUOTES); ?>&sex=<?php echo htmlspecialchars($search['sex'], ENT_QUOTES); ?>">前へ</a>
                     <?php else : ?>
                         <a class="not-click">前へ</a>
                     <?php endif; ?>
                     <?php for ($i = $page - 2; $i < ($page + 3); $i++) : ?>
                         <?php if ($i >= 1 && $i <= $pagenum) : ?>
                             <?php if ($i == $page) : ?>
-                                <a class="not-click"><?php echo $i; ?></a>
+                                <a class="not-click"><?php echo htmlspecialchars($i, ENT_QUOTES); ?></a>
                             <?php else : ?>
-                                <a href="?page=<?php echo $i; ?>&name=<?php echo htmlspecialchars($search['name'], ENT_QUOTES); ?>&sex=<?php echo htmlspecialchars($search['sex'], ENT_QUOTES); ?>"><?php echo $i; ?></a>
+                                <a href="?page=<?php echo htmlspecialchars($i, ENT_QUOTES); ?>&name=<?php echo htmlspecialchars($search['name'], ENT_QUOTES); ?>&sex=<?php echo htmlspecialchars($search['sex'], ENT_QUOTES); ?>"><?php echo $i; ?></a>
                             <?php endif; ?>
                         <?php endif; ?>
                     <?php endfor; ?>
                     <?php if ($page < $pagenum) : ?>
-                        <a href="?page=<?php echo ($page + 1); ?>&name=<?php echo htmlspecialchars($search['name'], ENT_QUOTES); ?>&sex=<?php echo htmlspecialchars($search['sex'], ENT_QUOTES); ?>">次へ</a>
+                        <a href="?page=<?php echo htmlspecialchars(($page + 1), ENT_QUOTES); ?>&name=<?php echo htmlspecialchars($search['name'], ENT_QUOTES); ?>&sex=<?php echo htmlspecialchars($search['sex'], ENT_QUOTES); ?>">次へ</a>
                     <?php else : ?>
                         <a class="not-click">次へ</a>
                     <?php endif; ?>

@@ -11,7 +11,7 @@
     <main>
         <!-- 成功メッセージ -->
         <?php if (empty($_POST['add']) && !empty($_SESSION['success_msg'])) : ?>
-            <p class="success-message"><?php echo $_SESSION['success_msg']; ?></p>
+            <p class="success-message"><?php echo htmlspecialchars($_SESSION['success_msg'], ENT_QUOTES); ?></p>
             <?php unset($_SESSION['success_msg']); ?>
         <?php endif; ?>
 
@@ -21,13 +21,13 @@
             <?php if (!empty($errors)) : ?>
                 <ul class="error-message">
                     <?php foreach ($errors as $error) : ?>
-                        <li>・<?php echo $error; ?></li>
+                        <li>・<?php echo htmlspecialchars($error, ENT_QUOTES); ?></li>
                     <?php endforeach ?>
                 </ul>
             <?php endif; ?>
             <div class="add-form">
                 <form action="" method="post">
-
+                    <input type="hidden" name="token" value="<?php echo $token; ?>">
                     <!-- 氏名 -->
                     <div class="form-area">
                         <label class="label" for="name">氏名<span>必須</span></label>

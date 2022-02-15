@@ -18,8 +18,19 @@ try {
     $errors[] = $e->getMessage();
 }
 
+
 // 更新処理
 if (!empty($_POST['edit'])) {
+
+    // トークンチェック
+    if (
+        empty($_POST['token'])
+        || empty($_SESSION['token'])
+        || $_POST['token'] !== $_SESSION['token']
+    ) {
+        $errors[] = 'トークンが一致しません';
+    }
+    
     $employee = new Employee($_POST);
 
     if ($employee->name === null) {
@@ -84,6 +95,10 @@ if (!empty($_POST['edit'])) {
     } else {
         $employee = new Employee();
     }
+
+    //トークンの生成
+    $token = bin2hex(openssl_random_pseudo_bytes(16));
+    $_SESSION['token'] = $token;
 }
 require("./views/edit.view.php");
 ?>

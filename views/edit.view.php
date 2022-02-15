@@ -28,7 +28,7 @@
             <?php if (!empty($employee)) : ?>
                 <div class="add-form">
                     <form action="" method="post">
-
+                        <input type="hidden" name="token" value="<?php echo $token; ?>">
                         <!-- 氏名 -->
                         <div class="form-area">
                             <label class="label" for="name">氏名<span>必須</span></label>

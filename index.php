@@ -1,5 +1,6 @@
 <?php
 require('./entities/employee.php');
+session_start();
 
 $errors = [];
 $search['name'] = null;
