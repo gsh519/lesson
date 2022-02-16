@@ -84,7 +84,9 @@ td {
 }
 
 .form-select {
-    padding: 5px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }
 
 .form-submit {
@@ -135,4 +137,8 @@ td {
 
 .married label {
     font-weight: normal;
+}
+
+.form-address {
+    margin-bottom: 10px;
 }

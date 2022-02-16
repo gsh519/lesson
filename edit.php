@@ -81,6 +81,8 @@ if (!empty($_POST['edit'])) {
             $_SESSION['success_msg'] = '更新しました';
             header("Location: ./edit.php?id={$id}");
             exit;
+        } else {
+            $errors[] = '更新できませんでした';
         }
     }
 } else {
@@ -91,14 +93,15 @@ if (!empty($_POST['edit'])) {
         $stmt->bindValue(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
         $employee_array = $stmt->fetch();
-        $employee = new Employee($employee_array);
-    } else {
-        $employee = new Employee();
-    }
-
-    //トークンの生成
-    $token = bin2hex(openssl_random_pseudo_bytes(16));
-    $_SESSION['token'] = $token;
+        if (!empty($employee_array)) {
+            $employee = new Employee($employee_array);
+        } 
+    } 
 }
+
+//トークンの生成
+$token = bin2hex(openssl_random_pseudo_bytes(16));
+$_SESSION['token'] = $token;
+
 require("./views/edit.view.php");
 ?>

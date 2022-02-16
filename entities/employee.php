@@ -1,5 +1,6 @@
 <?php
 
+// 社員
 class Employee
 {
     public $id = null;
