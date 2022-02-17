@@ -1,73 +1,49 @@
 <?php
 require('./entities/employee.php');
+require('./entities/sql.php');
+
 session_start();
+
+$sql = new Sql();
 $errors = [];
+$params = [];
 
 if (isset($_GET['id']) && $_GET['id'] !== '') {
     $id = $_GET['id'];
 }
 
-//データベース接続
-try {
-    $option = array(
-		PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-		PDO::MYSQL_ATTR_MULTI_STATEMENTS => false,
-	);
-    $pdo = new PDO('mysql:charset=UTF8;dbname=employee;host=mysql', 'root', 'password', $option);
-} catch (PDOException $e) {
-    $errors[] = $e->getMessage();
-}
-
+$pdo = $sql->dbConnect();
 
 // 更新処理
 if (!empty($_POST['edit'])) {
-
-    // トークンチェック
-    if (
-        empty($_POST['token'])
-        || empty($_SESSION['token'])
-        || $_POST['token'] !== $_SESSION['token']
-    ) {
-        $errors[] = 'トークンが一致しません';
-    }
     
     $employee = new Employee($_POST);
 
-    if ($employee->name === null) {
-        $errors[] = '氏名は必須です';
-    }
-    if ($employee->name_kana === null) {
-        $errors[] = 'かなは必須です';
-    }
-    if ($employee->email === null) {
-        $errors[] = 'メールアドレスは必須です';
-    } elseif (!filter_var($employee->email, FILTER_VALIDATE_EMAIL)) {
-        $errors[] = 'メールアドレスの形式が間違っています';
-    }
-    if ($employee->commute <= 0) {
-        $errors[] = '通勤時間は1以上にしてください';
-    }
-    if ($employee->blood_type === null) {
-        $errors[] = '血液型は必須です';
+    // 社員情報バリデーション
+    $errors_array = $employee->checkEmployeeData($employee->name, $employee->name_kana, $employee->email, $employee->commute, $employee->blood_type);
+    foreach ($errors_array as $error) {
+        if (isset($error)) {
+            $errors[] = $error;
+        }
     }
 
     if (empty($errors)) {
 
+        $params[':id'] = $id;
+        $params[':name'] = $employee->name;
+        $params[':name_kana'] = $employee->name_kana;
+        $params[':sex'] = $employee->sex;
+        $params[':birthday'] = $employee->birthday;
+        $params[':email'] = $employee->email;
+        $params[':commute'] = $employee->commute;
+        $params[':blood_type'] = $employee->blood_type;
+        $params[':married'] = $employee->married;
+
         $pdo->beginTransaction();
 
         try {
-            $sql = "UPDATE employees SET name = :name, name_kana = :name_kana, sex = :sex, birthday = :birthday, email = :email, commute = :commute, blood_type = :blood_type, married = :married WHERE id = :id";
-            $stmt = $pdo->prepare($sql);
-            $stmt->bindParam(':name', $employee->name, PDO::PARAM_STR);
-            $stmt->bindParam(':name_kana', $employee->name_kana, PDO::PARAM_STR);
-            $stmt->bindParam(':sex', $employee->sex, PDO::PARAM_STR);
-            $stmt->bindParam(':birthday', $employee->birthday, PDO::PARAM_STR);
-            $stmt->bindParam(':email', $employee->email, PDO::PARAM_STR);
-            $stmt->bindParam(':commute', $employee->commute, PDO::PARAM_STR);
-            $stmt->bindParam(':blood_type', $employee->blood_type, PDO::PARAM_STR);
-            $stmt->bindParam(':married', $employee->married, PDO::PARAM_STR);
-            $stmt->bindValue(':id', $id, PDO::PARAM_INT);
-            $stmt->execute();
+            $note = "UPDATE employees SET name = :name, name_kana = :name_kana, sex = :sex, birthday = :birthday, email = :email, commute = :commute, blood_type = :blood_type, married = :married WHERE id = :id";
+            $sql->plural($note, $params);
             $res = $pdo->commit();
         } catch (Exception $e) {
             $errors[] = $e->getMessage();
@@ -86,13 +62,11 @@ if (!empty($_POST['edit'])) {
         }
     }
 } else {
+    $params[':id'] = $id;
     if (isset($_GET['id']) && $_GET['id'] !== '') {
         //id一致のデータ取得
-        $sql = "SELECT * FROM employees WHERE id = :id";
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
-        $stmt->execute();
-        $employee_array = $stmt->fetch();
+        $note = "SELECT * FROM employees WHERE id = :id";
+        $employee_array = $sql->select($note, $params);
         if (!empty($employee_array)) {
             $employee = new Employee($employee_array);
         } 

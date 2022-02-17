@@ -1,7 +1,9 @@
 <?php
 require('./entities/employee.php');
+require('./entities/sql.php');
 session_start();
 
+$sql = new Sql();
 $errors = [];
 $search['name'] = null;
 $search['sex'] = null;
@@ -18,16 +20,7 @@ if (isset($_GET['page'])) {
     $page = 1;
 }
 
-//データベース接続
-try {
-    $option = array(
-		PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-		PDO::MYSQL_ATTR_MULTI_STATEMENTS => false,
-	);
-    $pdo = new PDO('mysql:charset=UTF8;dbname=employee;host=mysql', 'root', 'password', $option);
-} catch (PDOException $e) {
-    $errors[] = $e->getMessage();
-}
+$pdo = $sql->dbConnect();
 
 //WHERE文の作成
 $sql_where = "WHERE 1 = 1 ";
