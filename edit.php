@@ -1,11 +1,11 @@
 <?php
 require('./entities/employee.php');
+require('./varidators/employee-validator.php');
 require('./entities/sql.php');
 
 session_start();
 
 $sql = new Sql();
-$errors = [];
 $params = [];
 
 if (isset($_GET['id']) && $_GET['id'] !== '') {
@@ -20,15 +20,20 @@ if (!empty($_POST['edit'])) {
     $employee = new Employee($_POST);
 
     // 社員情報バリデーション
-    $errors_array = $employee->checkEmployeeData($employee->name, $employee->name_kana, $employee->email, $employee->commute, $employee->blood_type);
-    foreach ($errors_array as $error) {
-        if (isset($error)) {
-            $errors[] = $error;
-        }
+    $validator = new EmployeeValidator();
+    $validator->validate($employee);
+    // トークンチェック
+    if (
+        empty($_POST['token'])
+        || empty($_SESSION['token'])
+        || $_POST['token'] !== $_SESSION['token']
+    ) {
+        $errors[] = 'トークンが一致しません';
+        $validator->valid = false;
     }
 
-    if (empty($errors)) {
-
+    if ($validator->valid) {
+        // エラーなし
         $params[':id'] = $id;
         $params[':name'] = $employee->name;
         $params[':name_kana'] = $employee->name_kana;
@@ -60,14 +65,18 @@ if (!empty($_POST['edit'])) {
         } else {
             $errors[] = '更新できませんでした';
         }
+    } else {
+        // エラーあり
+        $errors = $validator->errors;
     }
+
 } else {
     $params[':id'] = $id;
     if (isset($_GET['id']) && $_GET['id'] !== '') {
         //id一致のデータ取得
         $note = "SELECT * FROM employees WHERE id = :id";
         $employee_array = $sql->select($note, $params);
-        if (!empty($employee_array)) {
+        if (isset($employee_array)) {
             $employee = new Employee($employee_array);
         } 
     } 

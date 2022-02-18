@@ -12,7 +12,7 @@ class Employee
     public $commute = null;
     public $blood_type = null;
     public $married = null;
-    public $params = [];
+    // public $params = [];
 
     public function __construct($data = [])
     {
@@ -21,86 +21,84 @@ class Employee
         }
         if (isset($data['name']) && $data['name'] !== '') {
             $this->name = $data['name'];
-            $this->params['name'] = $data['name'];
         }
         if (isset($data['name_kana']) && $data['name_kana'] !== '') {
             $this->name_kana = $data['name_kana'];
-            $this->params['name_kana'] = $data['name_kana'];
         }
         if (isset($data['sex']) && $data['sex'] !== '') {
             $this->sex = $data['sex'];
-            $this->params['sex'] = $data['sex'];
+            // $this->params[':sex'] = $data['sex'];
         }
         if (isset($data['birthday']) && $data['birthday'] !== '') {
             $this->birthday = $data['birthday'];
-            $this->params['birthday'] = $data['birthday'];
+            // $this->params[':birthday'] = $data['birthday'];
         }
         if (isset($data['email']) && $data['email'] !== '') {
             $this->email = $data['email'];
-            $this->params['email'] = $data['email'];
+            // $this->params[':email'] = $data['email'];
         }
         if (isset($data['commute']) && $data['commute'] !== '') {
             $this->commute = $data['commute'];
-            $this->params['commute'] = $data['commute'];
+            // $this->params[':commute'] = $data['commute'];
         }
         if (isset($data['blood_type']) && $data['blood_type'] !== '') {
             $this->blood_type = $data['blood_type'];
-            $this->params['blood_type'] = $data['blood_type'];
+            // $this->params[':blood_type'] = $data['blood_type'];
         }
         if (isset($data['married']) && $data['married'] !== '') {
             $this->married = $data['married'];
-            $this->params['married'] = $data['married'];
+            // $this->params[':married'] = $data['married'];
         }
     }
 
     // 社員バリデーション
-    public function checkEmployeeData($name, $name_kana, $email, $commute, $blood_type)
-    {
-        // トークン
-        if (
-            empty($_POST['token'])
-            || empty($_SESSION['token'])
-            || $_POST['token'] !== $_SESSION['token']
-        ) {
-            $error_token = 'トークンが一致しません';
-        } else {
-            $error_token = null;
-        }
-        // 氏名
-        if ($name === null) {
-            $error_name = '氏名は必須です';
-        } else {
-            $error_name = null;
-        }
-        // かな
-        if ($name_kana === null) {  
-            $error_name_kana = 'かなは必須です';
-        } else {
-            $error_name_kana = null;
-        }
-        // メールアドレス
-        if ($email === null) {
-            $error_email = 'メールアドレスは必須です';
-        } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $error_email = 'メールアドレスの形式が間違っています';
-        } else {
-            $error_email = null;
-        }
-        // 通勤
-        if ($commute <= 0) {
-            $error_commute = '通勤時間は1以上にしてください';
-        } else {
-            $error_commute = null;
-        }
-        // 血液型
-        if ($blood_type === null) {
-            $error_blood_type = '血液型は必須です';
-        } else {
-            $error_blood_type = null;
-        }
+    // public function checkEmployeeData($name, $name_kana, $email, $commute, $blood_type)
+    // {
+    //     // トークン
+    //     if (
+    //         empty($_POST['token'])
+    //         || empty($_SESSION['token'])
+    //         || $_POST['token'] !== $_SESSION['token']
+    //     ) {
+    //         $error_token = 'トークンが一致しません';
+    //     } else {
+    //         $error_token = null;
+    //     }
+    //     // 氏名
+    //     if ($name === null) {
+    //         $error_name = '氏名は必須です';
+    //     } else {
+    //         $error_name = null;
+    //     }
+    //     // かな
+    //     if ($name_kana === null) {  
+    //         $error_name_kana = 'かなは必須です';
+    //     } else {
+    //         $error_name_kana = null;
+    //     }
+    //     // メールアドレス
+    //     if ($email === null) {
+    //         $error_email = 'メールアドレスは必須です';
+    //     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    //         $error_email = 'メールアドレスの形式が間違っています';
+    //     } else {
+    //         $error_email = null;
+    //     }
+    //     // 通勤
+    //     if ($commute <= 0) {
+    //         $error_commute = '通勤時間は1以上にしてください';
+    //     } else {
+    //         $error_commute = null;
+    //     }
+    //     // 血液型
+    //     if ($blood_type === null) {
+    //         $error_blood_type = '血液型は必須です';
+    //     } else {
+    //         $error_blood_type = null;
+    //     }
 
-        return [$error_token, $error_name, $error_name_kana, $error_email, $error_commute, $error_blood_type];
-    }
+    //     return [$error_token, $error_name, $error_name_kana, $error_email, $error_commute, $error_blood_type];
+    // }
 
     // 性別判定
     public function getSexLabel()

@@ -1,15 +1,12 @@
 <?php
 require('./entities/employee.php');
+require('./varidators/employee-validator.php');
 require('./entities/sql.php');
 
 session_start();
 
 $sql = new Sql();
-$success_msg = [];
-$errors = [];
 $params = [];
-
-
 
 // 登録ボタン処理
 if (!empty($_POST['add'])) {
@@ -17,15 +14,20 @@ if (!empty($_POST['add'])) {
     $employee = new Employee($_POST);
 
     // 社員情報バリデーション
-    $errors_array = $employee->checkEmployeeData($employee->name, $employee->name_kana, $employee->email, $employee->commute, $employee->blood_type);
-    foreach ($errors_array as $error) {
-        if (isset($error)) {
-            $errors[] = $error;
-        }
+    $validator = new EmployeeValidator();
+    $validator->validate($employee);
+    // トークンチェック
+    if (
+        empty($_POST['token'])
+        || empty($_SESSION['token'])
+        || $_POST['token'] !== $_SESSION['token']
+    ) {
+        $errors[] = 'トークンが一致しません';
+        $validator->valid = false;
     }
-
-    if (empty($errors)) {
-
+    if ($validator->valid) {
+        // エラーなし
+        //保存処理
         $params[':name'] = $employee->name;
         $params[':name_kana'] = $employee->name_kana;
         $params[':sex'] = $employee->sex;
@@ -48,7 +50,11 @@ if (!empty($_POST['add'])) {
 
         header("Location: ./add.php");
         exit;
+    } else {
+        // エラーあり
+        $errors = $validator->errors;
     }
+    
 } else {
     $employee = new Employee();
 }
