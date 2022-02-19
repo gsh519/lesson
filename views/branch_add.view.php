@@ -27,11 +27,11 @@
             <?php endif; ?>
             <div class="add-form">
                 <form action="" method="post">
-                    <input type="hidden" name="token" value="<?php echo $token; ?>">
+                    <input type="hidden" name="token" value="<?php echo $this->token; ?>">
                     <!-- 支店名 -->
                     <div class="form-area">
                         <label class="label" for="branch_name">支店名<span>必須</span></label>
-                        <input required type="text" id="branch_name" name="branch_name" class="form-input" value="<?php echo htmlspecialchars($branch->branch_name, ENT_QUOTES);?>">
+                        <input required type="text" id="branch_name" name="branch_name" class="form-input" value="<?php echo htmlspecialchars($this->branch->branch_name, ENT_QUOTES);?>">
                     </div>
 
                     <!-- 住所 -->
@@ -40,32 +40,32 @@
                         <div class="form-address">
                             <select required name="ken_name" id="ken_name" class="form-select">
                                 <option value="">都道府県を選択</option>
-                                <?php foreach ($branch->ken_names as $index => $ken_name) : ?>
-                                    <option <?php if ($branch->ken_name == $index + 1) { echo 'selected'; } ?> value="<?php echo htmlspecialchars($index + 1, ENT_QUOTES) ?>"><?php echo htmlspecialchars($ken_name, ENT_QUOTES) ?></option>
+                                <?php foreach ($this->branch->ken_names as $index => $ken_name) : ?>
+                                    <option <?php if ($this->branch->ken_name == $index + 1) { echo 'selected'; } ?> value="<?php echo htmlspecialchars($index + 1, ENT_QUOTES) ?>"><?php echo htmlspecialchars($ken_name, ENT_QUOTES) ?></option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
                         <div class="form-address">
-                            <input placeholder="市区町村" required type="text" id="city_name" name="city_name" class="form-input" value="<?php echo htmlspecialchars($branch->city_name, ENT_QUOTES); ?>">
+                            <input placeholder="市区町村" required type="text" id="city_name" name="city_name" class="form-input" value="<?php echo htmlspecialchars($this->branch->city_name, ENT_QUOTES); ?>">
                         </div>
                         <div class="form-address">
-                            <input placeholder="字番地" required type="text" id="street_address" name="street_address" class="form-input" value="<?php echo htmlspecialchars($branch->street_address, ENT_QUOTES); ?>">
+                            <input placeholder="字番地" required type="text" id="street_address" name="street_address" class="form-input" value="<?php echo htmlspecialchars($this->branch->street_address, ENT_QUOTES); ?>">
                         </div>
                         <div class="form-address">
-                            <input placeholder="建物名" type="text" id="building_name" name="building_name" class="form-input" value="<?php echo htmlspecialchars($branch->building_name, ENT_QUOTES); ?>">
+                            <input placeholder="建物名" type="text" id="building_name" name="building_name" class="form-input" value="<?php echo htmlspecialchars($this->branch->building_name, ENT_QUOTES); ?>">
                         </div>
                     </div>
 
                     <!-- 電話番号 -->
                     <div class="form-area">
                         <label class="label" for="phone_number">電話番号<span>必須</span></label>
-                        <input required type="tel" id="phone_number" name="phone_number" class="form-input" value="<?php echo htmlspecialchars($branch->phone_number, ENT_QUOTES); ?>">
+                        <input required type="tel" id="phone_number" name="phone_number" class="form-input" value="<?php echo htmlspecialchars($this->branch->phone_number, ENT_QUOTES); ?>">
                     </div>
 
                     <!-- 並び順 -->
                     <div class="form-area">
                         <label class="label" for="sort_order">並び順<span>必須</span></label>
-                        <input required type="number" step="1" min="1" id="sort_order" name="sort_order" class="form-input" value="<?php echo htmlspecialchars($branch->sort_order, ENT_QUOTES); ?>">
+                        <input required type="number" step="1" min="1" id="sort_order" name="sort_order" class="form-input" value="<?php echo htmlspecialchars($this->branch->sort_order, ENT_QUOTES); ?>">
                     </div>
 
                     <!-- 登録ボタン -->

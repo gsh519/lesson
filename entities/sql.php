@@ -1,6 +1,6 @@
 <?php
 
-class Sql 
+class Sql
 {
     public function dbConnect()
     {
@@ -13,7 +13,7 @@ class Sql
         } catch (PDOException $e) {
             echo 'error:' . $e->getMessage();
         }
-    
+
         return $pdo;
     }
 
