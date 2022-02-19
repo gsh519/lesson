@@ -97,7 +97,7 @@ td {
     cursor: pointer;
 }
 
-.success-message {
+.message {
     color: #fff;
     padding: 10px;
     background-color: rgb(84 149 84);

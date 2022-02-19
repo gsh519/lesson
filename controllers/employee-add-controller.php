@@ -1,4 +1,4 @@
-<?php 
+<?php
 require(__DIR__ . '/base-controller.php');
 require(__DIR__ . '/../entities/employee.php');
 require(__DIR__ . '/../varidators/employee-validator.php');
@@ -12,12 +12,12 @@ class EmployeeAddController extends BaseController
     {
         $sql = new Sql();
         $params = [];
-        
+
         // 登録ボタン処理
         if (!empty($_POST['add'])) {
-        
+
             $employee = new Employee($_POST);
-        
+
             // 社員情報バリデーション
             $validator = new EmployeeValidator();
             $validator->validate($employee);
@@ -32,30 +32,33 @@ class EmployeeAddController extends BaseController
                 $params[':commute'] = $employee->commute;
                 $params[':blood_type'] = $employee->blood_type;
                 $params[':married'] = $employee->married;
-        
-                $note = "INSERT INTO employees (name, name_kana, sex, birthday, email, commute, blood_type, married) VALUES (:name, :name_kana, :sex, :birthday, :email, :commute, :blood_type, :married)";
-        
-                $res = $sql->plural($note, $params);
-        
-                if ($res) {
-                    $_SESSION['success_msg'] = '登録しました';
+
+                $this->db->beginTransaction();
+
+                try {
+                    $note = "INSERT INTO employees (name, name_kana, sex, birthday, email, commute, blood_type, married) VALUES (:name, :name_kana, :sex, :birthday, :email, :commute, :blood_type, :married)";
+                    $sql->plural($note, $params);
+                    $this->db->commit();
+
+                    $_SESSION['msg'] = '登録しました';
+                    header("Location: ./add.php");
+                    exit;
+                } catch(Exception $e) {
+                    $_SESSION['msg'] = '登録できませんでした';
+                    $this->employee = $employee;
+                    $this->db->rollBack();
                 }
-                
-                $stmt = null;
-                $pdo = null;
-                
-                header("Location: ./add.php");
-                exit;
+
             } else {
                 // エラーあり
                 $errors = $validator->errors;
                 $this->employee = $employee;
             }
-            
+
         } else {
             $this->employee = new Employee();
         }
-        
-        require("./views/add.view.php");        
+
+        require("./views/add.view.php");
     }
 }

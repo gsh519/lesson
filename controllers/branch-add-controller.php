@@ -33,19 +33,22 @@ class BranchAddController extends BaseController
                 $params['building_name'] = $branch->building_name;
                 $params['sort_order'] = $branch->sort_order;
 
-                $note = "INSERT INTO branches (branch_name, phone_number, ken_name, city_name, street_address, building_name, sort_order) VALUES (:branch_name, :phone_number, :ken_name, :city_name, :street_address, :building_name, :sort_order)";
+                $this->db->beginTransaction();
 
-                $res = $sql->plural($note, $params);
+                try {
+                    $note = "INSERT INTO branches (branch_name, phone_number, ken_name, city_name, street_address, building_name, sort_order) VALUES (:branch_name, :phone_number, :ken_name, :city_name, :street_address, :building_name, :sort_order)";
+                    $sql->plural($note, $params);
+                    $this->db->commit();
 
-                if ($res) {
-                    $_SESSION['success_msg'] = '登録しました';
+                    $_SESSION['msg'] = '登録しました';
+                    header("Location: ./branch_add.php");
+                    exit;
+                } catch (Exception $e) {
+                    $_SESSION['msg'] = '更新できませんでした';
+                    $this->branch = $branch;
+                    $this->db->rollBack();
                 }
 
-                $stmt = null;
-                $pdo = null;
-
-                header("Location: ./branch_add.php");
-                exit;
             } else {
                 // エラーあり
                 $errors = $validator->errors;

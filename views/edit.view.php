@@ -10,10 +10,10 @@
 <body>
     <main>
 
-        <!-- 成功メッセージ -->
-        <?php if (empty($_POST['add']) && !empty($_SESSION['success_msg'])) : ?>
-            <p class="success-message"><?php echo $_SESSION['success_msg']; ?></p>
-            <?php unset($_SESSION['success_msg']); ?>
+        <!-- メッセージ -->
+        <?php if (empty($_POST['add']) && !empty($_SESSION['msg'])) : ?>
+            <p class="message"><?php echo $_SESSION['msg']; ?></p>
+            <?php unset($_SESSION['msg']); ?>
         <?php endif; ?>
         <h1 class="title">社員編集</h1>
         <div class="content">

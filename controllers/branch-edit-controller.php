@@ -18,8 +18,6 @@ class BranchEditController extends BaseController
             $id = $_GET['id'];
         }
 
-        $pdo = $sql->dbConnect();
-
         // 更新処理
         if (!empty($_POST['edit'])) {
 
@@ -38,26 +36,22 @@ class BranchEditController extends BaseController
                 $params['building_name'] = $branch->building_name;
                 $params['sort_order'] = $branch->sort_order;
 
-                $pdo->beginTransaction();
+                $this->db->beginTransaction();
 
                 try {
                     $note = "UPDATE branches SET branch_name = :branch_name, phone_number = :phone_number, ken_name = :ken_name, city_name = :city_name, street_address = :street_address, building_name = :building_name, sort_order = :sort_order WHERE id = :id";
                     $sql->plural($note, $params);
-                    $res = $pdo->commit();
-                } catch (Exception $e) {
-                    $errors[] = $e->getMessage();
-                    $pdo->rollBack();
-                    $res = false;
-                }
+                    $this->db->commit();
 
-                $stmt = null;
-                $pdo = null;
-
-                if ($res) {
-                    $_SESSION['success_msg'] = '更新しました';
+                    $_SESSION['msg'] = '更新しました';
                     header("Location: ./branch_edit.php?id={$id}");
                     exit;
+                } catch (Exception $e) {
+                    $_SESSION['msg'] = '更新できませんでした';
+                    $this->branch = $branch;
+                    $this->db->rollBack();
                 }
+
             } else {
                 // エラーあり
                 $errors = $validator->errors;

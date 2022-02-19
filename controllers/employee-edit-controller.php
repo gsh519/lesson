@@ -18,8 +18,6 @@ class EmployeeEditController extends BaseController
             $id = $_GET['id'];
         }
 
-        $pdo = $sql->dbConnect();
-
         // 更新処理
         if (!empty($_POST['edit'])) {
 
@@ -40,27 +38,22 @@ class EmployeeEditController extends BaseController
                 $params[':blood_type'] = $employee->blood_type;
                 $params[':married'] = $employee->married;
 
-                $pdo->beginTransaction();
+                $this->db->beginTransaction();
 
                 try {
-                    $note = "UPDATE employees SET name = :name, name_kana = :name_kana, sex = :sex, birthday = :birthday, email = :email, commute = :commute, blood_type = :blood_type, married = :married WHERE id = :id";
+                    $note = "UPDATE employees SET name_kana = :name_kana, sex = :sex, birthday = :birthday, email = :email, commute = :commute, blood_type = :blood_type, married = :married WHERE id = :id";
                     $sql->plural($note, $params);
-                    $res = $pdo->commit();
-                } catch (Exception $e) {
-                    $errors[] = $e->getMessage();
-                    $pdo->rollBack();
-                }
+                    $this->db->commit();
 
-                $stmt = null;
-                $pdo = null;
-
-                if ($res) {
-                    $_SESSION['success_msg'] = '更新しました';
+                    $_SESSION['msg'] = '更新しました';
                     header("Location: ./edit.php?id={$id}");
                     exit;
-                } else {
-                    $errors[] = '更新できませんでした';
+                } catch (Exception $e) {
+                    $_SESSION['msg'] = '更新できませんでした';
+                    $this->employee = $employee;
+                    $this->db->rollBack();
                 }
+
             } else {
                 // エラーあり
                 $errors = $validator->errors;
