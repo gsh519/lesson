@@ -22,13 +22,13 @@
 
         <div class="content">
             <!-- エラー文 -->
-            <?php if (!empty($errors)) : ?>
-                <ul>
-                    <?php foreach ($errors as $error) : ?>
+            <?php if (!empty($this->errors)) : ?>
+                <ul class="error-message">
+                    <?php foreach ($this->errors as $error) : ?>
                         <li><?php echo htmlspecialchars($error, ENT_QUOTES); ?></li>
                     <?php endforeach ?>
                 </ul>
-            <?php elseif (empty($errors)) : ?>
+            <?php elseif (empty($this->errors)) : ?>
                 <table>
                     <thead>
                         <tr>
@@ -39,7 +39,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($branches as $branch) : ?>
+                        <?php foreach ($this->branches as $branch) : ?>
                             <tr>
                                 <!-- 支店名 -->
                                 <td><?php echo htmlspecialchars($branch->branch_name, ENT_QUOTES); ?></td>

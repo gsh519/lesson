@@ -2,7 +2,6 @@
 require(__DIR__ . '/base-controller.php');
 require(__DIR__ . '/../entities/employee.php');
 require(__DIR__ . '/../varidators/employee-validator.php');
-require(__DIR__ . '/../entities/sql.php');
 
 class EmployeeEditController extends BaseController
 {
@@ -10,10 +9,6 @@ class EmployeeEditController extends BaseController
 
     public function main()
     {
-
-        $sql = new Sql();
-        $params = [];
-
         if (isset($_GET['id']) && $_GET['id'] !== '') {
             $id = $_GET['id'];
         }
@@ -28,27 +23,29 @@ class EmployeeEditController extends BaseController
             $validator->validate($employee);
             if ($validator->valid) {
                 // エラーなし
-                $params[':id'] = $id;
-                $params[':name'] = $employee->name;
-                $params[':name_kana'] = $employee->name_kana;
-                $params[':sex'] = $employee->sex;
-                $params[':birthday'] = $employee->birthday;
-                $params[':email'] = $employee->email;
-                $params[':commute'] = $employee->commute;
-                $params[':blood_type'] = $employee->blood_type;
-                $params[':married'] = $employee->married;
+                $this->params[':id'] = $id;
+                $this->params[':name'] = $employee->name;
+                $this->params[':name_kana'] = $employee->name_kana;
+                $this->params[':sex'] = $employee->sex;
+                $this->params[':birthday'] = $employee->birthday;
+                $this->params[':email'] = $employee->email;
+                $this->params[':commute'] = $employee->commute;
+                $this->params[':blood_type'] = $employee->blood_type;
+                $this->params[':married'] = $employee->married;
 
                 $this->db->beginTransaction();
 
                 try {
-                    $note = "UPDATE employees SET name_kana = :name_kana, sex = :sex, birthday = :birthday, email = :email, commute = :commute, blood_type = :blood_type, married = :married WHERE id = :id";
-                    $sql->plural($note, $params);
+                    $update_sql = "UPDATE employees SET name = :name, name_kana = :name_kana, sex = :sex, birthday = :birthday, email = :email, commute = :commute, blood_type = :blood_type, married = :married WHERE id = :id";
+                    $update_stmt = $this->db->prepare($update_sql);
+                    $update_stmt->execute($this->params);
+                    // $this->sql->plural($update_sql, $this->params);
                     $this->db->commit();
-
                     $_SESSION['msg'] = '更新しました';
                     header("Location: ./edit.php?id={$id}");
                     exit;
                 } catch (Exception $e) {
+                    echo $e->getMessage();
                     $_SESSION['msg'] = '更新できませんでした';
                     $this->employee = $employee;
                     $this->db->rollBack();
@@ -61,11 +58,14 @@ class EmployeeEditController extends BaseController
             }
 
         } else {
-            $params[':id'] = $id;
+            $this->params[':id'] = $id;
             if (isset($_GET['id']) && $_GET['id'] !== '') {
                 //id一致のデータ取得
-                $note = "SELECT * FROM employees WHERE id = :id";
-                $employee_array = $sql->select($note, $params);
+                $select_sql = "SELECT * FROM employees WHERE id = :id";
+                $select_stmt = $this->db->prepare($select_sql);
+                $select_stmt->execute($this->params);
+                $employee_array = $select_stmt->fetch();
+                // $employee_array = $this->sql->select($select_sql, $this->params);
                 if (isset($employee_array)) {
                     $this->employee = new Employee($employee_array);
                 }

@@ -3,6 +3,7 @@ abstract class BaseController
 {
     public $db;
     public $token;
+    public $params = [];
 
     public function __construct()
     {

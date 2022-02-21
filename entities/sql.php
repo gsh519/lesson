@@ -26,6 +26,15 @@ class Sql
         return $res;
     }
 
+    public function selectAll($sql, $params)
+    {
+        $pdo = $this->dbConnect();
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute($params);
+        $res = $stmt->fetchAll();
+        return $res;
+    }
+
     public function plural($sql, $params)
     {
         $pdo = $this->dbConnect();

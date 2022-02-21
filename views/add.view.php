@@ -11,7 +11,7 @@
     <main>
         <!-- 成功メッセージ -->
         <?php if (empty($_POST['add']) && !empty($_SESSION['msg'])) : ?>
-            <p class="success-message"><?php echo htmlspecialchars($_SESSION['msg'], ENT_QUOTES); ?></p>
+            <p class="message"><?php echo htmlspecialchars($_SESSION['msg'], ENT_QUOTES); ?></p>
             <?php unset($_SESSION['msg']); ?>
         <?php endif; ?>
 

@@ -29,13 +29,13 @@
 
         <div class="content">
             <!-- エラー文 -->
-            <?php if (!empty($errors)) : ?>
-                <ul>
-                    <?php foreach ($errors as $error) : ?>
+            <?php if (!empty($this->errors)) : ?>
+                <ul class="error-message">
+                    <?php foreach ($this->errors as $error) : ?>
                         <li><?php echo htmlspecialchars($error, ENT_QUOTES); ?></li>
                     <?php endforeach ?>
                 </ul>
-            <?php elseif (empty($errors)) : ?>
+            <?php elseif (empty($this->errors)) : ?>
                 <table>
                     <thead>
                         <tr>
@@ -52,7 +52,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($employees as $employee) : ?>
+                        <?php foreach ($this->employees as $employee) : ?>
                             <tr>
                                 <!-- 氏名 -->
                                 <td><?php echo htmlspecialchars($employee->name, ENT_QUOTES); ?></td>
