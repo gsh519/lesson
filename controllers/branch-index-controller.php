@@ -2,13 +2,15 @@
 require(__DIR__ . '/../controllers/base-controller.php');
 require(__DIR__ . '/../entities/branch.php');
 require(__DIR__ . '/../varidators/branch-validator.php');
+require(__DIR__ . '/../modules/paginator.php');
 
 class BranchIndexController extends BaseController
 {
-    public $page = 1;
     public $search = [];
     public $errors = [];
     public $branches = [];
+    public $page = 1;
+    public $paginator;
 
     public function __construct($data = [])
     {
@@ -42,7 +44,6 @@ class BranchIndexController extends BaseController
         $select_stmt = $this->db->prepare($select_sql);
         $select_stmt->execute($this->params);
         $branches_arrays = $select_stmt->fetchAll();
-        // $branches_arrays = $this->sql->selectAll($select_sql, $this->params);
 
         if (empty($branches_arrays)) {
             $this->errors[] = '該当する支店がありません';
@@ -58,19 +59,13 @@ class BranchIndexController extends BaseController
         $count_stmt = $this->db->prepare($count_sql);
         $count_stmt->execute($this->params);
         $branches_count = $count_stmt->fetch();
-        $branchesAll_num = $branches_count[0];
-        // $branches_count = $this->sql->select($count_sql, $this->params);
 
-        //総ページ数
-        $pagenum = ceil($branchesAll_num / 5);
-
-        //○〜○件目
-        $from = ($this->page - 1) * 5 + 1;
-        if ($this->page == $pagenum) {
-            $to = $branchesAll_num;
-        } else {
-            $to = $this->page * 5;
-        }
+        // ページネーション
+        $this->paginator = new Paginator();
+        $this->paginator->items_per_page = 5;
+        $this->paginator->page = $this->page;
+        $this->paginator->all_num = $branches_count[0];
+        $this->paginator->search = $this->search;
 
         require("./views/branch_index.view.php");
     }

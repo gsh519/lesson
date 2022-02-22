@@ -15,7 +15,7 @@
         <div class="serch-form">
             <form action="" method="get">
                 <label for="name">氏名</label>
-                <input type="text" name="name" id="name" value="<?php if (isset($this->search['name'])) { echo htmlspecialchars($this->search['name'], ENT_QUOTES); } ?>">
+                <input type="text" name="name" id="name" value="<?php if (isset($this->search['name'])) { $this->escape($this->search['name']); } ?>">
                 <label for="sex">性別</label>
                 <select name="sex" id="sex">
                     <option value="">全て</option>
@@ -32,7 +32,7 @@
             <?php if (!empty($this->errors)) : ?>
                 <ul class="error-message">
                     <?php foreach ($this->errors as $error) : ?>
-                        <li><?php echo htmlspecialchars($error, ENT_QUOTES); ?></li>
+                        <li><?php $this->escape($error); ?></li>
                     <?php endforeach ?>
                 </ul>
             <?php elseif (empty($this->errors)) : ?>
@@ -55,54 +55,64 @@
                         <?php foreach ($this->employees as $employee) : ?>
                             <tr>
                                 <!-- 氏名 -->
-                                <td><?php echo htmlspecialchars($employee->name, ENT_QUOTES); ?></td>
+                                <td><?php $this->escape($employee->name); ?></td>
                                 <!-- かな -->
-                                <td><?php echo htmlspecialchars($employee->name_kana, ENT_QUOTES); ?></td>
+                                <td><?php $this->escape($employee->name_kana); ?></td>
                                 <!-- 性別 -->
-                                <td><?php echo htmlspecialchars($employee->getSexLabel(), ENT_QUOTES); ?></td>
+                                <td><?php $this->escape($employee->getSexLabel()); ?></td>
                                 <!-- 年齢 -->
-                                <td><?php echo htmlspecialchars($employee->getAge(), ENT_QUOTES); ?></td>
+                                <td><?php $this->escape($employee->getAge()); ?></td>
                                 <!-- 生年月日 -->
-                                <td><?php echo htmlspecialchars($employee->birthday, ENT_QUOTES); ?></td>
+                                <td><?php $this->escape($employee->birthday); ?></td>
                                 <!-- メールアドレス -->
-                                <td><?php echo htmlspecialchars($employee->email, ENT_QUOTES); ?></td>
+                                <td><?php $this->escape($employee->email); ?></td>
                                 <!-- 通勤時間 -->
-                                <td><?php echo htmlspecialchars($employee->getCommute(), ENT_QUOTES); ?></td>
+                                <td><?php $this->escape($employee->getCommute()); ?></td>
                                 <!-- 血液型 -->
-                                <td><?php echo htmlspecialchars($employee->getBlood_type(), ENT_QUOTES); ?></td>
+                                <td><?php $this->escape($employee->getBlood_type()); ?></td>
                                 <!-- 既婚 -->
-                                <td><?php echo htmlspecialchars($employee->getMarried(), ENT_QUOTES); ?></td>
+                                <td><?php $this->escape($employee->getMarried()); ?></td>
 
-                                <td><a class="edit-button" href="./edit.php?id=<?php echo htmlspecialchars($employee->id, ENT_QUOTES); ?>">編集</a></td>
+                                <td><a class="edit-button" href="./edit.php?id=<?php $this->escape($employee->id); ?>">編集</a></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
                 </table>
 
+
                 <!-- ページネーション -->
-                <?php echo htmlspecialchars($employeesAll_num, ENT_QUOTES); ?>件中 <?php echo htmlspecialchars($from, ENT_QUOTES); ?>-<?php echo htmlspecialchars($to, ENT_QUOTES); ?>件目を表示
+                <?php $this->paginator->show(); ?>
+                <?php /*
+                <?php $this->escape($employeesAll_num); ?>件中 <?php $this->escape($from); ?>-<?php $this->escape($to); ?>件目を表示
                 <?php if ($pagenum >= 2) : ?>
+
                     <?php if ($this->page >= 2) : ?>
-                        <a href="?page=<?php echo htmlspecialchars(($this->page - 1), ENT_QUOTES); ?>&name=<?php echo htmlspecialchars($this->search['name'], ENT_QUOTES); ?>&sex=<?php echo htmlspecialchars($this->search['sex'], ENT_QUOTES); ?>">前へ</a>
+                        <a href="?page=<?php $this->escape(($this->page - 1)); ?>&name=<?php $this->escape($this->search['name']); ?>&sex=<?php $this->escape($this->search['sex']); ?>">前へ</a>
                     <?php else : ?>
                         <a class="not-click">前へ</a>
                     <?php endif; ?>
                     <?php for ($i = $this->page - 2; $i < ($this->page + 3); $i++) : ?>
                         <?php if ($i >= 1 && $i <= $pagenum) : ?>
                             <?php if ($i == $this->page) : ?>
-                                <a class="not-click"><?php echo htmlspecialchars($i, ENT_QUOTES); ?></a>
+                                <a class="not-click"><?php $this->escape($i); ?></a>
                             <?php else : ?>
-                                <a href="?page=<?php echo htmlspecialchars($i, ENT_QUOTES); ?>&name=<?php echo htmlspecialchars($this->search['name'], ENT_QUOTES); ?>&sex=<?php echo htmlspecialchars($this->search['sex'], ENT_QUOTES); ?>"><?php echo $i; ?></a>
+                                <a href="?page=<?php $this->escape($i); ?>&name=<?php $this->escape($this->search['name']); ?>&sex=<?php $this->escape($this->search['sex']); ?>"><?php $this->escape($i); ?></a>
                             <?php endif; ?>
                         <?php endif; ?>
                     <?php endfor; ?>
                     <?php if ($this->page < $pagenum) : ?>
-                        <a href="?page=<?php echo htmlspecialchars(($this->page + 1), ENT_QUOTES); ?>&name=<?php echo htmlspecialchars($this->search['name'], ENT_QUOTES); ?>&sex=<?php echo htmlspecialchars($this->search['sex'], ENT_QUOTES); ?>">次へ</a>
+                        <a href="?page=<?php $this->escape(($this->page + 1)); ?>&name=<?php $this->escape($this->search['name']); ?>&sex=<?php $this->escape($this->search['sex'], ENT_QUOTES); ?>">次へ</a>
                     <?php else : ?>
                         <a class="not-click">次へ</a>
                     <?php endif; ?>
                 <?php endif; ?>
+                */ ?>
+
+
+
             <?php endif; ?>
+
+
             <div>
                 <a href="./add.php">追加</a>
             </div>

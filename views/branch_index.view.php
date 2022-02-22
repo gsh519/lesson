@@ -15,7 +15,7 @@
         <div class="serch-form">
             <form action="" method="get">
                 <label for="branch_name">支店名</label>
-                <input type="text" name="branch_name" id="branch_name" value="<?php if (isset($this->search['branch_name'])) { echo htmlspecialchars($this->search['branch_name'], ENT_QUOTES); } ?>">
+                <input type="text" name="branch_name" id="branch_name" value="<?php if (isset($this->search['branch_name'])) { $this->escape($this->search['branch_name']); } ?>">
                 <button type="submit">検索</button>
             </form>
         </div>
@@ -25,7 +25,7 @@
             <?php if (!empty($this->errors)) : ?>
                 <ul class="error-message">
                     <?php foreach ($this->errors as $error) : ?>
-                        <li><?php echo htmlspecialchars($error, ENT_QUOTES); ?></li>
+                        <li><?php $this->escape($error); ?></li>
                     <?php endforeach ?>
                 </ul>
             <?php elseif (empty($this->errors)) : ?>
@@ -42,41 +42,42 @@
                         <?php foreach ($this->branches as $branch) : ?>
                             <tr>
                                 <!-- 支店名 -->
-                                <td><?php echo htmlspecialchars($branch->branch_name, ENT_QUOTES); ?></td>
+                                <td><?php $this->escape($branch->branch_name); ?></td>
                                 <!-- 電話番号 -->
-                                <td><?php echo htmlspecialchars($branch->phone_number, ENT_QUOTES); ?></td>
+                                <td><?php $this->escape($branch->phone_number); ?></td>
                                 <!-- 住所 -->
-                                <td><?php echo htmlspecialchars($branch->connectAddress(), ENT_QUOTES) ?></td>
+                                <td><?php $this->escape($branch->connectAddress()) ?></td>
 
-                                <td><a class="edit-button" href="./branch_edit.php?id=<?php echo htmlspecialchars($branch->id, ENT_QUOTES); ?>">編集</a></td>
+                                <td><a class="edit-button" href="./branch_edit.php?id=<?php $this->escape($branch->id); ?>">編集</a></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
                 </table>
 
                 <!-- ページネーション -->
-                <?php echo htmlspecialchars($branchesAll_num, ENT_QUOTES); ?>件中 <?php echo htmlspecialchars($from, ENT_QUOTES); ?>-<?php echo htmlspecialchars($to, ENT_QUOTES); ?>件目を表示
+                <?php $this->paginator->show(); ?>
+                <?php /* $this->escape($branchesAll_num); ?>件中 <?php $this->escape($from); ?>-<?php $this->escape($to); ?>件目を表示
                 <?php if ($pagenum >= 2) : ?>
                     <?php if ($this->page >= 2) : ?>
-                        <a href="?page=<?php echo htmlspecialchars(($this->page - 1), ENT_QUOTES); ?>">前へ</a>
+                        <a href="?page=<?php $this->escape(($this->page - 1)); ?>&branch_name=<?php $this->escape($this->search['branch_name']); ?>">前へ</a>
                     <?php else : ?>
                         <a class="not-click">前へ</a>
                     <?php endif; ?>
                     <?php for ($i = $this->page - 2; $i < ($this->page + 3); $i++) : ?>
                         <?php if ($i >= 1 && $i <= $pagenum) : ?>
                             <?php if ($i == $this->page) : ?>
-                                <a class="not-click"><?php echo htmlspecialchars($i, ENT_QUOTES); ?></a>
+                                <a class="not-click"><?php $this->escape($i); ?></a>
                             <?php else : ?>
-                                <a href="?page=<?php echo htmlspecialchars($i, ENT_QUOTES); ?>"><?php echo $i; ?></a>
+                                <a href="?page=<?php $this->escape($i); ?>&branch_name=<?php $this->escape($this->search['branch_name']); ?>"><?php $this->escape($i); ?></a>
                             <?php endif; ?>
                         <?php endif; ?>
                     <?php endfor; ?>
                     <?php if ($this->page < $pagenum) : ?>
-                        <a href="?page=<?php echo htmlspecialchars(($this->page + 1), ENT_QUOTES); ?>">次へ</a>
+                        <a href="?page=<?php $this->escape(($this->page + 1)); ?>&branch_name=<?php $this->escape($this->search['branch_name']); ?>">次へ</a>
                     <?php else : ?>
                         <a class="not-click">次へ</a>
                     <?php endif; ?>
-                <?php endif; ?>
+                <?php endif; */ ?>
 
             <?php endif; ?>
             <div>

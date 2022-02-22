@@ -2,13 +2,15 @@
 require(__DIR__ . '/base-controller.php');
 require(__DIR__ . '/../entities/employee.php');
 require(__DIR__ . '/../varidators/employee-validator.php');
+require(__DIR__ . '/../modules/paginator.php');
 
 class EmployeeIndexController extends BaseController
 {
-    public $page = 1;
     public $search = [];
     public $errors = [];
     public $employees = [];
+    public $page = 1;
+    public $paginator;
 
     public function __construct($data = [])
     {
@@ -52,7 +54,6 @@ class EmployeeIndexController extends BaseController
         $select_stmt = $this->db->prepare($select_sql);
         $select_stmt->execute($this->params);
         $employees_arrays = $select_stmt->fetchAll();
-        // $employees_arrays = $this->sql->selectAll($select_sql, $this->params);
 
         if (empty($employees_arrays)) {
             $this->errors[] = '該当する社員がいません';
@@ -68,19 +69,13 @@ class EmployeeIndexController extends BaseController
         $count_stmt = $this->db->prepare($count_sql);
         $count_stmt->execute($this->params);
         $employees_count = $count_stmt->fetch();
-        $employeesAll_num = $employees_count[0];
-        // $employees_count = $this->sql->select($count_sql, $this->params);
 
-        //総ページ数
-        $pagenum = ceil($employeesAll_num / 5);
-
-        //○〜○件目
-        $from = ($this->page - 1) * 5 + 1;
-        if ($this->page == $pagenum) {
-            $to = $employeesAll_num;
-        } else {
-            $to = $this->page * 5;
-        }
+        // ページネーション
+        $this->paginator = new Paginator();
+        $this->paginator->items_per_page = 5;
+        $this->paginator->page = $this->page;
+        $this->paginator->all_num = $employees_count[0];
+        $this->paginator->search = $this->search;
 
         require("./views/index.view.php");
     }

@@ -35,4 +35,10 @@ abstract class BaseController
             die('error:' . $e->getMessage());
         }
     }
+
+    public function escape($str)
+    {
+        $res = htmlspecialchars($str, ENT_QUOTES);
+        echo $res;
+    }
 }

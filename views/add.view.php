@@ -11,7 +11,7 @@
     <main>
         <!-- 成功メッセージ -->
         <?php if (empty($_POST['add']) && !empty($_SESSION['msg'])) : ?>
-            <p class="message"><?php echo htmlspecialchars($_SESSION['msg'], ENT_QUOTES); ?></p>
+            <p class="message"><?php $this->escape($_SESSION['msg'], ENT_QUOTES); ?></p>
             <?php unset($_SESSION['msg']); ?>
         <?php endif; ?>
 
@@ -21,23 +21,23 @@
             <?php if (!empty($errors)) : ?>
                 <ul class="error-message">
                     <?php foreach ($errors as $error) : ?>
-                        <li>・<?php echo htmlspecialchars($error, ENT_QUOTES); ?></li>
+                        <li>・<?php $this->escape($error); ?></li>
                     <?php endforeach ?>
                 </ul>
             <?php endif; ?>
             <div class="add-form">
                 <form action="" method="post">
-                    <input type="hidden" name="token" value="<?php echo $this->token; ?>">
+                    <input type="hidden" name="token" value="<?php $this->escape($this->token); ?>">
                     <!-- 氏名 -->
                     <div class="form-area">
                         <label class="label" for="name">氏名<span>必須</span></label>
-                        <input required type="text" id="name" name="name" class="form-input" value="<?php echo htmlspecialchars($this->employee->name, ENT_QUOTES);?>">
+                        <input required type="text" id="name" name="name" class="form-input" value="<?php $this->escape($this->employee->name);?>">
                     </div>
 
                     <!-- かな -->
                     <div class="form-area">
                         <label class="label" for="name_kana">かな<span>必須</span></label>
-                        <input required type="text" id="name_kana" name="name_kana" class="form-input" value="<?php echo htmlspecialchars($this->employee->name_kana, ENT_QUOTES); ?>">
+                        <input required type="text" id="name_kana" name="name_kana" class="form-input" value="<?php $this->escape($this->employee->name_kana); ?>">
                     </div>
 
                     <!-- 性別 -->
@@ -54,19 +54,19 @@
                     <!-- 生年月日 -->
                     <div class="form-area">
                         <label class="label" for="birthday">生年月日</label>
-                        <input type="date" id="birthday" name="birthday" class="form-input" value="<?php echo htmlspecialchars($this->employee->birthday, ENT_QUOTES); ?>">
+                        <input type="date" id="birthday" name="birthday" class="form-input" value="<?php $this->escape($this->employee->birthday); ?>">
                     </div>
 
                     <!-- メールアドレス -->
                     <div class="form-area">
                         <label class="label" for="email">メールアドレス<span>必須</span></label>
-                        <input required type="email" id="email" name="email" class="form-input form-email" value="<?php echo htmlspecialchars($this->employee->email, ENT_QUOTES); ?>">
+                        <input required type="email" id="email" name="email" class="form-input form-email" value="<?php $this->escape($this->employee->email); ?>">
                     </div>
 
                     <!-- 通勤時間 -->
                     <div class="form-area">
                         <label class="label" for="commute">通勤時間（分）</label>
-                        <input type="number" id="commute" name="commute" class="form-input form-commute" min="1" max="999" step="1" value="<?php echo htmlspecialchars($this->employee->commute, ENT_QUOTES); ?>">
+                        <input type="number" id="commute" name="commute" class="form-input form-commute" min="1" max="999" step="1" value="<?php $this->escape($this->employee->commute); ?>">
                     </div>
 
                     <!-- 血液型 -->
