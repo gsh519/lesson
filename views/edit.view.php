@@ -40,6 +40,17 @@
                             <input required type="text" id="name_kana" name="name_kana" class="form-input" value="<?php $this->escape($this->employee->name_kana); ?>">
                         </div>
 
+                        <!-- 部門 -->
+                        <div class="form-area">
+                            <label class="label" for="branch_name">部門</label>
+                            <select name="branch_name" id="branch_name" class="form-select">
+                                <option value="">選択</option>
+                                <?php foreach ($this->branches_name as $branch_name) : ?>
+                                    <option <?php if ($this->employee->branch_name === $branch_name['branch_name']) { echo 'selected'; } ?> value="<?php $this->escape($branch_name['branch_name']) ?>"><?php $this->escape($branch_name['branch_name']); ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+
                         <!-- 性別 -->
                         <div class="form-area">
                             <label class="label" for="sex">性別</label>

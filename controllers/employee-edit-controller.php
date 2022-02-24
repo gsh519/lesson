@@ -6,6 +6,7 @@ require(__DIR__ . '/../varidators/employee-validator.php');
 class EmployeeEditController extends BaseController
 {
     public $employee;
+    public $branches_name = [];
 
     public function main()
     {
@@ -26,6 +27,7 @@ class EmployeeEditController extends BaseController
                 $this->params[':id'] = $id;
                 $this->params[':name'] = $employee->name;
                 $this->params[':name_kana'] = $employee->name_kana;
+                $this->params[':branch_name'] = $employee->branch_name;
                 $this->params[':sex'] = $employee->sex;
                 $this->params[':birthday'] = $employee->birthday;
                 $this->params[':email'] = $employee->email;
@@ -36,10 +38,9 @@ class EmployeeEditController extends BaseController
                 $this->db->beginTransaction();
 
                 try {
-                    $update_sql = "UPDATE employees SET name = :name, name_kana = :name_kana, sex = :sex, birthday = :birthday, email = :email, commute = :commute, blood_type = :blood_type, married = :married WHERE id = :id";
+                    $update_sql = "UPDATE employees SET name = :name, name_kana = :name_kana, branch_name = :branch_name, sex = :sex, birthday = :birthday, email = :email, commute = :commute, blood_type = :blood_type, married = :married WHERE id = :id";
                     $update_stmt = $this->db->prepare($update_sql);
                     $update_stmt->execute($this->params);
-                    // $this->sql->plural($update_sql, $this->params);
                     $this->db->commit();
                     $_SESSION['msg'] = '更新しました';
                     header("Location: ./edit.php?id={$id}");
@@ -65,12 +66,16 @@ class EmployeeEditController extends BaseController
                 $select_stmt = $this->db->prepare($select_sql);
                 $select_stmt->execute($this->params);
                 $employee_array = $select_stmt->fetch();
-                // $employee_array = $this->sql->select($select_sql, $this->params);
                 if (isset($employee_array)) {
                     $this->employee = new Employee($employee_array);
                 }
             }
         }
+
+        $select_sql = "SELECT branch_name FROM branches ORDER BY sort_order ASC";
+        $select_stmt = $this->db->prepare($select_sql);
+        $select_stmt->execute();
+        $this->branches_name = $select_stmt->fetchAll();
 
         require("./views/edit.view.php");
     }

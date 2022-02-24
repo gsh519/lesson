@@ -6,6 +6,7 @@ require(__DIR__ . '/../varidators/employee-validator.php');
 class EmployeeAddController extends BaseController
 {
     public $employee;
+    public $branches_name = [];
 
     public function main()
     {
@@ -21,6 +22,7 @@ class EmployeeAddController extends BaseController
                 //保存処理
                 $this->params[':name'] = $employee->name;
                 $this->params[':name_kana'] = $employee->name_kana;
+                $this->params[':branch_name'] = $employee->branch_name;
                 $this->params[':sex'] = $employee->sex;
                 $this->params[':birthday'] = $employee->birthday;
                 $this->params[':email'] = $employee->email;
@@ -31,10 +33,9 @@ class EmployeeAddController extends BaseController
                 $this->db->beginTransaction();
 
                 try {
-                    $insert_sql = "INSERT INTO employees (name, name_kana, sex, birthday, email, commute, blood_type, married) VALUES (:name, :name_kana, :sex, :birthday, :email, :commute, :blood_type, :married)";
+                    $insert_sql = "INSERT INTO employees (name, name_kana, branch_name, sex, birthday, email, commute, blood_type, married) VALUES (:name, :name_kana, :branch_name, :sex, :birthday, :email, :commute, :blood_type, :married)";
                     $insert_stmt = $this->db->prepare($insert_sql);
                     $insert_stmt->execute($this->params);
-                    // $this->sql->plural($insert_sql, $this->params);
                     $this->db->commit();
                     $_SESSION['msg'] = '登録しました';
                     header("Location: ./add.php");
@@ -44,7 +45,6 @@ class EmployeeAddController extends BaseController
                     $this->employee = $employee;
                     $this->db->rollBack();
                 }
-
             } else {
                 // エラーあり
                 $errors = $validator->errors;
@@ -54,6 +54,11 @@ class EmployeeAddController extends BaseController
         } else {
             $this->employee = new Employee();
         }
+
+        $select_sql = "SELECT branch_name FROM branches ORDER BY sort_order ASC";
+        $select_stmt = $this->db->prepare($select_sql);
+        $select_stmt->execute();
+        $this->branches_name = $select_stmt->fetchAll();
 
         require("./views/add.view.php");
     }
