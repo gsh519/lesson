@@ -15,14 +15,8 @@ class BranchIndexController extends BaseController
     public function __construct($data = [])
     {
         parent::__construct();
-        if (isset($data['branch_name']) && $data['branch_name'] !== '') {
-            $this->search['branch_name'] = $data['branch_name'];
-        } else {
-            $this->search['branch_name'] = null;
-        }
-        if (isset($data['page']) && $data['page'] !== '') {
-            $this->page = $data['page'];
-        }
+        $this->search['branch_name'] = $this->arrayGet($data, 'branch_name');
+        $this->page = $this->arrayGet($data, 'page', 1);
     }
 
     public function main()

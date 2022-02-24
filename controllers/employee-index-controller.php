@@ -16,19 +16,9 @@ class EmployeeIndexController extends BaseController
     {
         parent::__construct();
         // 初期値に値をセット
-        if (isset($data['name']) && $data['name'] !== '') {
-            $this->search['name'] = $data['name'];
-        } else {
-            $this->search['name'] = null;
-        }
-        if (isset($data['sex']) && $data['sex'] !== '') {
-            $this->search['sex'] = $data['sex'];
-        } else {
-            $this->search['sex'] = null;
-        }
-        if (isset($data['page']) && $data['page'] !== '') {
-            $this->page = $data['page'];
-        }
+        $this->search['name'] = $this->arrayGet($data, 'name');
+        $this->search['sex'] = $this->arrayGet($data, 'sex');
+        $this->page = $this->arrayGet($data, 'page', 1);
     }
 
     public function main()
@@ -64,7 +54,7 @@ class EmployeeIndexController extends BaseController
             $this->employees[] = $employee;
         }
 
-        //全件のデータ数を値を取得
+        //全件のデータ数を取得
         $count_sql = "SELECT count(*) FROM employees " . $sql_where;
         $count_stmt = $this->db->prepare($count_sql);
         $count_stmt->execute($this->params);

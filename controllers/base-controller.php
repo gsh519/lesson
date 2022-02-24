@@ -41,4 +41,21 @@ abstract class BaseController
         $res = htmlspecialchars($str, ENT_QUOTES);
         echo $res;
     }
+
+    /**
+     * 配列 $array の キー $key の値を返す。
+     * 空文字の場合、null の場合、キー自体が存在しない場合、$default を返す
+     *
+     * @param [type] $array
+     * @param [type] $key
+     * @param [type] $default
+     */
+    public function arrayGet($array, $key, $default = null)
+    {
+        if (isset($array[$key]) && $array[$key] !== '') {
+            return $array[$key];
+        } else {
+            return $default;
+        }
+    }
 }

@@ -32,22 +32,22 @@ class Paginator
             for ($i = $this->page - 2; $i < ($this->page + 3); $i++) {
                 if ($i >= 1 && $i <= $this->pagenum) {
                     if ($i == $this->page) {
-                        echo "<a class='not-click'>{$this->escape($i)}</a>";
+                        echo " <a class='not-click'>{$this->escape($i)}</a>";
                     } else {
-                        echo "<a href='" . $this->link($i) . "'>{$this->escape($i)}</a>";
+                        echo " <a href='" . $this->link($i) . "'>{$this->escape($i)}</a>";
                     }
                 }
             }
 
             if ($this->page < $this->pagenum) {
-                echo "<a href='" . $this->link($this->page + 1) . "'>次へ</a>";
+                echo " <a href='" . $this->link($this->page + 1) . "'>次へ</a>";
             } else {
-                echo "<a class='not-click'>次へ</a>";
+                echo " <a class='not-click'>次へ</a>";
             }
         }
     }
 
-    public function link($page = 1)
+    public function link($page)
     {
         $query = $this->search;
         $query['page'] = $page;
