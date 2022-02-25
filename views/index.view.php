@@ -23,6 +23,13 @@
                     <option <?php if ($this->search['sex'] === '1') { echo 'selected'; } ?> value="1">女</option>
                     <option <?php if ($this->search['sex'] === '2') { echo 'selected'; } ?> value="2">不明</option>
                 </select>
+                <label for="branch_id">性別</label>
+                <select name="branch_id" id="branch_id">
+                    <option value="">全て</option>
+                    <?php foreach ($this->branches as $id => $name) : ?>
+                        <option <?php if ($this->search['branch_id'] === $id) { echo 'selected'; } ?> value="<?php $this->escape($id); ?>"><?php $this->escape($name); ?></option>
+                    <?php endforeach; ?>
+                </select>
                 <button type="submit">検索</button>
             </form>
         </div>
@@ -41,6 +48,7 @@
                         <tr>
                             <th>氏名</th>
                             <th>かな</th>
+                            <th>支店</th>
                             <th>性別</th>
                             <th>年齢</th>
                             <th>生年月日</th>
@@ -58,6 +66,12 @@
                                 <td><?php $this->escape($employee->name); ?></td>
                                 <!-- かな -->
                                 <td><?php $this->escape($employee->name_kana); ?></td>
+                                <!-- 支店 -->
+                                <td>
+                                    <?php if ($employee->branch_id && isset($this->branches[$employee->branch_id])): ?>
+                                    <?php $this->escape($this->branches[$employee->branch_id]); ?>
+                                    <?php endif; ?>
+                                </td>
                                 <!-- 性別 -->
                                 <td><?php $this->escape($employee->getSexLabel()); ?></td>
                                 <!-- 年齢 -->
@@ -79,40 +93,9 @@
                     </tbody>
                 </table>
 
-
                 <!-- ページネーション -->
                 <?php $this->paginator->show(); ?>
-                <?php /*
-                <?php $this->escape($employeesAll_num); ?>件中 <?php $this->escape($from); ?>-<?php $this->escape($to); ?>件目を表示
-                <?php if ($pagenum >= 2) : ?>
-
-                    <?php if ($this->page >= 2) : ?>
-                        <a href="?page=<?php $this->escape(($this->page - 1)); ?>&name=<?php $this->escape($this->search['name']); ?>&sex=<?php $this->escape($this->search['sex']); ?>">前へ</a>
-                    <?php else : ?>
-                        <a class="not-click">前へ</a>
-                    <?php endif; ?>
-                    <?php for ($i = $this->page - 2; $i < ($this->page + 3); $i++) : ?>
-                        <?php if ($i >= 1 && $i <= $pagenum) : ?>
-                            <?php if ($i == $this->page) : ?>
-                                <a class="not-click"><?php $this->escape($i); ?></a>
-                            <?php else : ?>
-                                <a href="?page=<?php $this->escape($i); ?>&name=<?php $this->escape($this->search['name']); ?>&sex=<?php $this->escape($this->search['sex']); ?>"><?php $this->escape($i); ?></a>
-                            <?php endif; ?>
-                        <?php endif; ?>
-                    <?php endfor; ?>
-                    <?php if ($this->page < $pagenum) : ?>
-                        <a href="?page=<?php $this->escape(($this->page + 1)); ?>&name=<?php $this->escape($this->search['name']); ?>&sex=<?php $this->escape($this->search['sex'], ENT_QUOTES); ?>">次へ</a>
-                    <?php else : ?>
-                        <a class="not-click">次へ</a>
-                    <?php endif; ?>
-                <?php endif; ?>
-                */ ?>
-
-
-
             <?php endif; ?>
-
-
             <div>
                 <a href="./add.php">追加</a>
             </div>

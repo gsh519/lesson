@@ -9,6 +9,7 @@ class EmployeeIndexController extends BaseController
     public $search = [];
     public $errors = [];
     public $employees = [];
+    public $branches = [];
     public $page = 1;
     public $paginator;
 
@@ -18,6 +19,7 @@ class EmployeeIndexController extends BaseController
         // 初期値に値をセット
         $this->search['name'] = $this->arrayGet($data, 'name');
         $this->search['sex'] = $this->arrayGet($data, 'sex');
+        $this->search['branch_id'] = $this->arrayGet($data, 'branch_id');
         $this->page = $this->arrayGet($data, 'page', 1);
     }
 
@@ -36,6 +38,10 @@ class EmployeeIndexController extends BaseController
             $sql_where = $sql_where . "and sex = :sex ";
             $this->params[":sex"] = $this->search['sex'];
         }
+        if ($this->search['branch_id'] !== null) {
+            $sql_where = $sql_where . "and branch_id = :branch_id ";
+            $this->params[":branch_id"] = $this->search['branch_id'];
+        }
 
         //メインデータ取得
         $select_sql = "SELECT * FROM employees " . $sql_where;
@@ -45,10 +51,12 @@ class EmployeeIndexController extends BaseController
         $select_stmt->execute($this->params);
         $employees_arrays = $select_stmt->fetchAll();
 
+        // データがない場合エラー表示
         if (empty($employees_arrays)) {
             $this->errors[] = '該当する社員がいません';
         }
 
+        // データ格納
         foreach ($employees_arrays as $employee_array) {
             $employee = new Employee($employee_array);
             $this->employees[] = $employee;
@@ -66,6 +74,15 @@ class EmployeeIndexController extends BaseController
         $this->paginator->page = $this->page;
         $this->paginator->all_num = $employees_count[0];
         $this->paginator->search = $this->search;
+
+        //支店データ取得
+        $select_branch_sql = "SELECT id, branch_name FROM branches ORDER BY sort_order ASC";
+        $select_branch_stmt = $this->db->prepare($select_branch_sql);
+        $select_branch_stmt->execute();
+        $branches = $select_branch_stmt->fetchAll();
+        foreach ($branches as $branch) {
+            $this->branches[$branch['id']] = $branch['branch_name'];
+        }
 
         require("./views/index.view.php");
     }

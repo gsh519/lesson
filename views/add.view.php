@@ -42,11 +42,11 @@
 
                     <!-- 部門 -->
                     <div class="form-area">
-                        <label class="label" for="branch_name">部門</label>
-                        <select name="branch_name" id="branch_name" class="form-select">
+                        <label class="label" for="branch_id">部門</label>
+                        <select name="branch_id" id="branch_id" class="form-select">
                             <option value="">選択</option>
-                            <?php foreach ($this->branches_name as $branch_name) : ?>
-                                <option <?php if ($this->employee->branch_name === $branch_name['branch_name']) { echo 'selected'; } ?> value="<?php $this->escape($branch_name['branch_name']) ?>"><?php $this->escape($branch_name['branch_name']); ?></option>
+                            <?php foreach ($this->branches as $branch) : ?>
+                                <option <?php if ($this->employee->branch_id === $branch['id']) { echo 'selected'; } ?> value="<?php $this->escape($branch['id']) ?>"><?php $this->escape($branch['branch_name']); ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>

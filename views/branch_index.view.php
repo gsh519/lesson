@@ -56,29 +56,6 @@
 
                 <!-- ページネーション -->
                 <?php $this->paginator->show(); ?>
-                <?php /* $this->escape($branchesAll_num); ?>件中 <?php $this->escape($from); ?>-<?php $this->escape($to); ?>件目を表示
-                <?php if ($pagenum >= 2) : ?>
-                    <?php if ($this->page >= 2) : ?>
-                        <a href="?page=<?php $this->escape(($this->page - 1)); ?>&branch_name=<?php $this->escape($this->search['branch_name']); ?>">前へ</a>
-                    <?php else : ?>
-                        <a class="not-click">前へ</a>
-                    <?php endif; ?>
-                    <?php for ($i = $this->page - 2; $i < ($this->page + 3); $i++) : ?>
-                        <?php if ($i >= 1 && $i <= $pagenum) : ?>
-                            <?php if ($i == $this->page) : ?>
-                                <a class="not-click"><?php $this->escape($i); ?></a>
-                            <?php else : ?>
-                                <a href="?page=<?php $this->escape($i); ?>&branch_name=<?php $this->escape($this->search['branch_name']); ?>"><?php $this->escape($i); ?></a>
-                            <?php endif; ?>
-                        <?php endif; ?>
-                    <?php endfor; ?>
-                    <?php if ($this->page < $pagenum) : ?>
-                        <a href="?page=<?php $this->escape(($this->page + 1)); ?>&branch_name=<?php $this->escape($this->search['branch_name']); ?>">次へ</a>
-                    <?php else : ?>
-                        <a class="not-click">次へ</a>
-                    <?php endif; ?>
-                <?php endif; */ ?>
-
             <?php endif; ?>
             <div>
                 <a href="./branch_add.php">追加</a>
