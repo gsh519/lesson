@@ -7,6 +7,7 @@ class Employee
     public $name = null;
     public $name_kana = null;
     public $branch_id = null;
+    public $branch_name = null;
     public $sex = null;
     public $birthday = null;
     public $email = null;
@@ -27,6 +28,9 @@ class Employee
         }
         if (isset($data['branch_id']) && $data['branch_id'] !== '') {
             $this->branch_id = $data['branch_id'];
+        }
+        if (isset($data['branch_name']) && $data['branch_name'] !== '') {
+            $this->branch_name = $data['branch_name'];
         }
         if (isset($data['sex']) && $data['sex'] !== '') {
             $this->sex = $data['sex'];

@@ -38,7 +38,6 @@ class BranchEditController extends BaseController
                     $update_sql = "UPDATE branches SET branch_name = :branch_name, phone_number = :phone_number, ken_name = :ken_name, city_name = :city_name, street_address = :street_address, building_name = :building_name, sort_order = :sort_order WHERE id = :id";
                     $update_stmt = $this->db->prepare($update_sql);
                     $update_stmt->execute($this->params);
-                    // $this->sql->plural($update_sql, $this->params);
                     $this->db->commit();
                     $_SESSION['msg'] = '更新しました';
                     header("Location: ./branch_edit.php?id={$id}");
@@ -63,7 +62,6 @@ class BranchEditController extends BaseController
                 $select_stmt = $this->db->prepare($select_sql);
                 $select_stmt->execute($this->params);
                 $branch_array = $select_stmt->fetch();
-                // $branch_array = $this->sql->select($select_sql, $this->params);
                 if (isset($branch_array)) {
                     $this->branch = new Branch($branch_array);
                 }

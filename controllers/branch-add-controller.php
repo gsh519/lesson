@@ -32,7 +32,6 @@ class BranchAddController extends BaseController
 
                 try {
                     $insert_sql = "INSERT INTO branches (branch_name, phone_number, ken_name, city_name, street_address, building_name, sort_order) VALUES (:branch_name, :phone_number, :ken_name, :city_name, :street_address, :building_name, :sort_order)";
-                    // $this->sql->plural($insert_sql, $this->params);
                     $insert_stmt = $this->db->prepare($insert_sql);
                     $insert_stmt->execute($this->params);
                     $this->db->commit();

@@ -55,6 +55,7 @@ class EmployeeAddController extends BaseController
             $this->employee = new Employee();
         }
 
+        // セレクトボックス用選択肢取得
         $select_sql = "SELECT id, branch_name FROM branches ORDER BY sort_order ASC";
         $select_stmt = $this->db->prepare($select_sql);
         $select_stmt->execute();

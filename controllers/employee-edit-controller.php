@@ -69,9 +69,12 @@ class EmployeeEditController extends BaseController
                 if (isset($employee_array)) {
                     $this->employee = new Employee($employee_array);
                 }
+
+                // var_dump($this->employee);die;
             }
         }
 
+        // セレクトボックス用支店選択肢取得
         $select_sql = "SELECT id, branch_name FROM branches ORDER BY sort_order ASC";
         $select_stmt = $this->db->prepare($select_sql);
         $select_stmt->execute();

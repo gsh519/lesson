@@ -23,11 +23,11 @@
                     <option <?php if ($this->search['sex'] === '1') { echo 'selected'; } ?> value="1">女</option>
                     <option <?php if ($this->search['sex'] === '2') { echo 'selected'; } ?> value="2">不明</option>
                 </select>
-                <label for="branch_id">性別</label>
+                <label for="branch_id">支店</label>
                 <select name="branch_id" id="branch_id">
                     <option value="">全て</option>
                     <?php foreach ($this->branches as $id => $name) : ?>
-                        <option <?php if ($this->search['branch_id'] === $id) { echo 'selected'; } ?> value="<?php $this->escape($id); ?>"><?php $this->escape($name); ?></option>
+                        <option <?php if ($this->search['branch_id'] == $id) { echo 'selected'; } ?> value="<?php $this->escape($id); ?>"><?php $this->escape($name); ?></option>
                     <?php endforeach; ?>
                 </select>
                 <button type="submit">検索</button>
@@ -68,9 +68,10 @@
                                 <td><?php $this->escape($employee->name_kana); ?></td>
                                 <!-- 支店 -->
                                 <td>
-                                    <?php if ($employee->branch_id && isset($this->branches[$employee->branch_id])): ?>
+                                    <?php $this->escape($employee->branch_name); ?>
+                                    <?php /* if ($employee->branch_id && isset($this->branches[$employee->branch_id])): ?>
                                     <?php $this->escape($this->branches[$employee->branch_id]); ?>
-                                    <?php endif; ?>
+                                    <?php endif; */?>
                                 </td>
                                 <!-- 性別 -->
                                 <td><?php $this->escape($employee->getSexLabel()); ?></td>

@@ -44,12 +44,12 @@ class EmployeeIndexController extends BaseController
         }
 
         //メインデータ取得
-        $select_sql = "SELECT * FROM employees " . $sql_where;
+        $select_sql = "SELECT employees.*, branches.branch_name FROM employees LEFT OUTER JOIN branches ON employees.branch_id = branches.id " . $sql_where;
         $start_no = (5 * $this->page) - 5;
         $select_sql = $select_sql . "limit 5 offset {$start_no}";
         $select_stmt = $this->db->prepare($select_sql);
         $select_stmt->execute($this->params);
-        $employees_arrays = $select_stmt->fetchAll();
+        $employees_arrays = $select_stmt->fetchAll(PDO::FETCH_ASSOC);
 
         // データがない場合エラー表示
         if (empty($employees_arrays)) {
@@ -62,7 +62,7 @@ class EmployeeIndexController extends BaseController
             $this->employees[] = $employee;
         }
 
-        //全件のデータ数を取得
+        //ページネーション用件数取得
         $count_sql = "SELECT count(*) FROM employees " . $sql_where;
         $count_stmt = $this->db->prepare($count_sql);
         $count_stmt->execute($this->params);
@@ -75,7 +75,7 @@ class EmployeeIndexController extends BaseController
         $this->paginator->all_num = $employees_count[0];
         $this->paginator->search = $this->search;
 
-        //支店データ取得
+        // セレクトボックス用選択肢取得
         $select_branch_sql = "SELECT id, branch_name FROM branches ORDER BY sort_order ASC";
         $select_branch_stmt = $this->db->prepare($select_branch_sql);
         $select_branch_stmt->execute();
