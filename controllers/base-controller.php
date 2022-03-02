@@ -1,4 +1,6 @@
 <?php
+require(__DIR__ . '/../config/config.php');
+
 abstract class BaseController
 {
     public $db;
@@ -33,7 +35,7 @@ abstract class BaseController
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                 PDO::MYSQL_ATTR_MULTI_STATEMENTS => false,
             );
-            $this->db = new PDO('mysql:charset=UTF8;dbname=employee;host=mysql', 'root', 'password', $option);
+            $this->db = new PDO('mysql:charset=UTF8;dbname=' . DB_NAME . ';host=' . DB_HOST, DB_USER, DB_PASS, $option);
         } catch (PDOException $e) {
             die('error:' . $e->getMessage());
         }
