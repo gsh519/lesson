@@ -19,10 +19,43 @@ main {
     margin: 0 auto;
 }
 
+a {
+    text-decoration: none;
+}
+
+.menu {
+    background-color: #000;
+    color: #fff;
+}
+
+.menu-list {
+    display: flex;
+    align-items: center;
+    margin: 0;
+}
+
+.menu-list a {
+    display: block;
+    padding: 5px 10px;
+    color: #fff;
+}
+
+.menu-list a:hover {
+    background-color: #999;
+}
+
+.menu-list a.active {
+    background-color: #999;
+}
+
 .title {
     background-color: #000;
     color: #fff;
     padding: 10px;
+}
+
+.title a {
+    color: #fff;
 }
 
 .content {

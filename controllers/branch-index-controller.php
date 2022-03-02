@@ -11,6 +11,7 @@ class BranchIndexController extends BaseController
     public $branches = [];
     public $page = 1;
     public $paginator;
+    public $active_menu = 'branch-list';
 
     public function __construct($data = [])
     {
@@ -60,6 +61,8 @@ class BranchIndexController extends BaseController
         $this->paginator->page = $this->page;
         $this->paginator->all_num = $branches_count[0];
         $this->paginator->search = $this->search;
+
+        var_dump($_SERVER['REQUEST_URI']);
 
         require("./views/branch_index.view.php");
     }

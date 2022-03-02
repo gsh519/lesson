@@ -9,10 +9,13 @@
 </head>
 <body>
     <main>
+        <!-- 共通メニュー -->
+        <?php require('./views/menu.view.php'); ?>
+
         <h1 class="title">支店一覧</h1>
 
         <!-- 検索フォーム -->
-        <div class="serch-form">
+        <div class="search-form">
             <form action="" method="get">
                 <label for="branch_name">支店名</label>
                 <input type="text" name="branch_name" id="branch_name" value="<?php if (isset($this->search['branch_name'])) { $this->escape($this->search['branch_name']); } ?>">

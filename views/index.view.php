@@ -9,10 +9,10 @@
 </head>
 <body>
     <main>
-        <h1 class="title">社員一覧</h1>
-
+        <?php require('./views/menu.view.php'); ?>
+        <h1 class="title"><a href="/">社員一覧</a></h1>
         <!-- 検索フォーム -->
-        <div class="serch-form">
+        <div class="search-form">
             <form action="" method="get">
                 <label for="name">氏名</label>
                 <input type="text" name="name" id="name" value="<?php if (isset($this->search['name'])) { $this->escape($this->search['name']); } ?>">
@@ -67,12 +67,7 @@
                                 <!-- かな -->
                                 <td><?php $this->escape($employee->name_kana); ?></td>
                                 <!-- 支店 -->
-                                <td>
-                                    <?php $this->escape($employee->branch_name); ?>
-                                    <?php /* if ($employee->branch_id && isset($this->branches[$employee->branch_id])): ?>
-                                    <?php $this->escape($this->branches[$employee->branch_id]); ?>
-                                    <?php endif; */?>
-                                </td>
+                                <td><?php $this->escape($employee->branch_name); ?></td>
                                 <!-- 性別 -->
                                 <td><?php $this->escape($employee->getSexLabel()); ?></td>
                                 <!-- 年齢 -->

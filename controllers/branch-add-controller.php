@@ -7,6 +7,7 @@ require(__DIR__ . '/../varidators/branch-validator.php');
 class BranchAddController extends BaseController
 {
     public $branch;
+    public $active_menu = 'branch-add';
 
     public function main()
     {
@@ -54,6 +55,8 @@ class BranchAddController extends BaseController
         } else {
             $this->branch = new Branch();
         }
+
+        var_dump($_SERVER['REQUEST_URI']);
 
         require("./views/branch_add.view.php");
     }

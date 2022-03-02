@@ -7,6 +7,7 @@ class EmployeeAddController extends BaseController
 {
     public $employee;
     public $branches = [];
+    public $active_menu = 'employee-add';
 
     public function main()
     {
@@ -60,6 +61,8 @@ class EmployeeAddController extends BaseController
         $select_stmt = $this->db->prepare($select_sql);
         $select_stmt->execute();
         $this->branches = $select_stmt->fetchAll();
+
+        var_dump($_SERVER['REQUEST_URI']);
 
         require("./views/add.view.php");
     }

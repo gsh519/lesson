@@ -9,6 +9,8 @@
 </head>
 <body>
     <main>
+        <!-- 共通メニュー -->
+        <?php require('./views/menu.view.php'); ?>
 
         <!-- メッセージ -->
         <?php if (empty($_POST['add']) && !empty($_SESSION['msg'])) : ?>

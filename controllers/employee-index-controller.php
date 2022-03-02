@@ -12,6 +12,7 @@ class EmployeeIndexController extends BaseController
     public $branches = [];
     public $page = 1;
     public $paginator;
+    public $active_menu = 'employee-list';
 
     public function __construct($data = [])
     {
@@ -83,6 +84,8 @@ class EmployeeIndexController extends BaseController
         foreach ($branches as $branch) {
             $this->branches[$branch['id']] = $branch['branch_name'];
         }
+
+        var_dump($_SERVER['REQUEST_URI']);
 
         require("./views/index.view.php");
     }

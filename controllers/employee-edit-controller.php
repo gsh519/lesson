@@ -7,6 +7,7 @@ class EmployeeEditController extends BaseController
 {
     public $employee;
     public $branches = [];
+    public $active_menu = 'employee-list';
 
     public function main()
     {

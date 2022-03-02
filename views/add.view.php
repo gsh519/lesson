@@ -9,6 +9,9 @@
 </head>
 <body>
     <main>
+        <!-- 共通メニュー -->
+        <?php require('./views/menu.view.php'); ?>
+
         <!-- 成功メッセージ -->
         <?php if (empty($_POST['add']) && !empty($_SESSION['msg'])) : ?>
             <p class="message"><?php $this->escape($_SESSION['msg'], ENT_QUOTES); ?></p>

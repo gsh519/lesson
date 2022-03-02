@@ -3,11 +3,14 @@ abstract class BaseController
 {
     public $db;
     public $token;
+    public $current_url;
+    public $active_menu;
     public $params = [];
 
     public function __construct()
     {
         session_start();
+        $this->current_url = $_SERVER['REQUEST_URI'];
 
         // トークンチェック
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {

@@ -8,6 +8,7 @@ class BranchEditController extends BaseController
 {
 
     public $branch;
+    public $active_menu = 'branch-list';
 
     public function main()
     {
