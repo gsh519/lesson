@@ -2,6 +2,8 @@
 require(__DIR__ . '/base-controller.php');
 require(__DIR__ . '/../entities/employee.php');
 require(__DIR__ . '/../varidators/employee-validator.php');
+require(__DIR__ . '/../repositories/employee-repository.php');
+require(__DIR__ . '/../repositories/branch-repository.php');
 
 class EmployeeEditController extends BaseController
 {
@@ -24,58 +26,34 @@ class EmployeeEditController extends BaseController
             $validator = new EmployeeValidator();
             $validator->validate($employee);
             if ($validator->valid) {
-                // エラーなし
-                $this->params[':id'] = $id;
-                $this->params[':name'] = $employee->name;
-                $this->params[':name_kana'] = $employee->name_kana;
-                $this->params[':branch_id'] = $employee->branch_id;
-                $this->params[':sex'] = $employee->sex;
-                $this->params[':birthday'] = $employee->birthday;
-                $this->params[':email'] = $employee->email;
-                $this->params[':commute'] = $employee->commute;
-                $this->params[':blood_type'] = $employee->blood_type;
-                $this->params[':married'] = $employee->married;
+                // 社員情報取得
+                $employee->id = $id;
+                $employee_repository = new EmployeeRepository($this->db);
+                $success = $employee_repository->edit($employee);
 
-                $this->db->beginTransaction();
-
-                try {
-                    $update_sql = "UPDATE employees SET name = :name, name_kana = :name_kana, branch_id = :branch_id, sex = :sex, birthday = :birthday, email = :email, commute = :commute, blood_type = :blood_type, married = :married WHERE id = :id";
-                    $update_stmt = $this->db->prepare($update_sql);
-                    $update_stmt->execute($this->params);
-                    $this->db->commit();
+                if ($success) {
                     $_SESSION['msg'] = '更新しました';
                     header("Location: ./edit.php?id={$id}");
                     exit;
-                } catch (Exception $e) {
-                    echo $e->getMessage();
+                } else {
                     $_SESSION['msg'] = '更新できませんでした';
                     $this->employee = $employee;
-                    $this->db->rollBack();
                 }
-
             } else {
-                // エラーあり
                 $errors = $validator->errors;
                 $this->employee = $employee;
             }
 
         } else {
-            $this->params[':id'] = $id;
+
             if (isset($_GET['id']) && $_GET['id'] !== '') {
                 //id一致のデータ取得
-                $select_sql = "SELECT * FROM employees WHERE id = :id";
-                $select_stmt = $this->db->prepare($select_sql);
-                $select_stmt->execute($this->params);
-                $employee_array = $select_stmt->fetch();
-                if (isset($employee_array)) {
-                    $this->employee = new Employee($employee_array);
-                }
-
-                // var_dump($this->employee);die;
+                $employee_repository = new EmployeeRepository($this->db);
+                $this->employee = $employee_repository->find($id);
             }
         }
 
-        // セレクトボックス用支店選択肢取得
+        // 支店カテゴリ
         $select_sql = "SELECT id, branch_name FROM branches ORDER BY sort_order ASC";
         $select_stmt = $this->db->prepare($select_sql);
         $select_stmt->execute();

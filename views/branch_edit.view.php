@@ -13,7 +13,7 @@
         <?php require('./views/menu.view.php'); ?>
 
         <!-- 成功メッセージ -->
-        <?php if (empty($_POST['add']) && !empty($_SESSION['msg'])) : ?>
+        <?php if (!empty($_SESSION['msg'])) : ?>
             <p class="message"><?php $this->escape($_SESSION['msg']); ?></p>
             <?php unset($_SESSION['msg']); ?>
         <?php endif; ?>

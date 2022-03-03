@@ -3,6 +3,8 @@ require(__DIR__ . '/base-controller.php');
 require(__DIR__ . '/../entities/employee.php');
 require(__DIR__ . '/../varidators/employee-validator.php');
 require(__DIR__ . '/../modules/paginator.php');
+require(__DIR__ . '/../repositories/employee-repository.php');
+require(__DIR__ . '/../repositories/branch-repository.php');
 
 class EmployeeIndexController extends BaseController
 {
@@ -26,66 +28,26 @@ class EmployeeIndexController extends BaseController
 
     public function main()
     {
-        // 社員のデータ取得処理
-        $sql_where = "WHERE 1 = 1 ";
-
-        //検索条件
-        if ($this->search['name'] !== null) {
-            $sql_where = $sql_where . "and ((name like :name) or (name_kana like :name)) ";
-            $value = '%' . $this->search['name'] . '%';
-            $this->params[":name"] = $value;
-        }
-        if ($this->search['sex'] !== null) {
-            $sql_where = $sql_where . "and sex = :sex ";
-            $this->params[":sex"] = $this->search['sex'];
-        }
-        if ($this->search['branch_id'] !== null) {
-            $sql_where = $sql_where . "and branch_id = :branch_id ";
-            $this->params[":branch_id"] = $this->search['branch_id'];
-        }
-
-        //メインデータ取得
-        $select_sql = "SELECT employees.*, branches.branch_name FROM employees LEFT OUTER JOIN branches ON employees.branch_id = branches.id " . $sql_where;
-        $start_no = (5 * $this->page) - 5;
-        $select_sql = $select_sql . "limit 5 offset {$start_no}";
-        $select_stmt = $this->db->prepare($select_sql);
-        $select_stmt->execute($this->params);
-        $employees_arrays = $select_stmt->fetchAll(PDO::FETCH_ASSOC);
+        // 社員一覧取得
+        $employee_repository = new EmployeeRepository($this->db);
+        $this->employees = $employee_repository->get($this->search, $this->page);
+        $employees_count = $employee_repository->count($this->search);
 
         // データがない場合エラー表示
-        if (empty($employees_arrays)) {
+        if (empty($this->employees)) {
             $this->errors[] = '該当する社員がいません';
         }
-
-        // データ格納
-        foreach ($employees_arrays as $employee_array) {
-            $employee = new Employee($employee_array);
-            $this->employees[] = $employee;
-        }
-
-        //ページネーション用件数取得
-        $count_sql = "SELECT count(*) FROM employees " . $sql_where;
-        $count_stmt = $this->db->prepare($count_sql);
-        $count_stmt->execute($this->params);
-        $employees_count = $count_stmt->fetch();
 
         // ページネーション
         $this->paginator = new Paginator();
         $this->paginator->items_per_page = 5;
         $this->paginator->page = $this->page;
-        $this->paginator->all_num = $employees_count[0];
+        $this->paginator->all_num = $employees_count;
         $this->paginator->search = $this->search;
 
-        // セレクトボックス用選択肢取得
-        $select_branch_sql = "SELECT id, branch_name FROM branches ORDER BY sort_order ASC";
-        $select_branch_stmt = $this->db->prepare($select_branch_sql);
-        $select_branch_stmt->execute();
-        $branches = $select_branch_stmt->fetchAll();
-        foreach ($branches as $branch) {
-            $this->branches[$branch['id']] = $branch['branch_name'];
-        }
-
-        var_dump($_SERVER['REQUEST_URI']);
+        // 支店カテゴリ
+        $branch_repository = new BranchRepository($this->db);
+        $this->branches = $branch_repository->get();
 
         require("./views/index.view.php");
     }

@@ -2,7 +2,7 @@
 require(__DIR__ . '/../controllers/base-controller.php');
 require(__DIR__ . '/../entities/branch.php');
 require(__DIR__ . '/../varidators/branch-validator.php');
-// require(__DIR__ . '/../entities/sql.php');
+require(__DIR__ . '/../repositories/branch-repository.php');
 
 class BranchAddController extends BaseController
 {
@@ -19,35 +19,18 @@ class BranchAddController extends BaseController
             $validator = new BranchValidator();
             $validator->validate($branch);
             if ($validator->valid) {
-                // エラーなし
-                //保存処理
-                $this->params[':branch_name'] = $branch->branch_name;
-                $this->params[':phone_number'] = $branch->phone_number;
-                $this->params[':ken_name'] = $branch->ken_name;
-                $this->params[':city_name'] = $branch->city_name;
-                $this->params[':street_address'] = $branch->street_address;
-                $this->params[':building_name'] = $branch->building_name;
-                $this->params[':sort_order'] = $branch->sort_order;
+                $branch_repository = new BranchRepository($this->db);
+                $success = $branch_repository->add($branch);
 
-                $this->db->beginTransaction();
-
-                try {
-                    $insert_sql = "INSERT INTO branches (branch_name, phone_number, ken_name, city_name, street_address, building_name, sort_order) VALUES (:branch_name, :phone_number, :ken_name, :city_name, :street_address, :building_name, :sort_order)";
-                    $insert_stmt = $this->db->prepare($insert_sql);
-                    $insert_stmt->execute($this->params);
-                    $this->db->commit();
-
+                if ($success) {
                     $_SESSION['msg'] = '登録しました';
                     header("Location: ./branch_add.php");
                     exit;
-                } catch (Exception $e) {
-                    $_SESSION['msg'] = '更新できませんでした';
+                } else {
+                    $_SESSION['msg'] = '登録できませんでした';
                     $this->branch = $branch;
-                    $this->db->rollBack();
                 }
-
             } else {
-                // エラーあり
                 $errors = $validator->errors;
                 $this->branch = $branch;
             }
@@ -55,8 +38,6 @@ class BranchAddController extends BaseController
         } else {
             $this->branch = new Branch();
         }
-
-        var_dump($_SERVER['REQUEST_URI']);
 
         require("./views/branch_add.view.php");
     }

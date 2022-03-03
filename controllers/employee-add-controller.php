@@ -2,6 +2,7 @@
 require(__DIR__ . '/base-controller.php');
 require(__DIR__ . '/../entities/employee.php');
 require(__DIR__ . '/../varidators/employee-validator.php');
+require(__DIR__ . '/../repositories/employee-repository.php');
 
 class EmployeeAddController extends BaseController
 {
@@ -19,32 +20,16 @@ class EmployeeAddController extends BaseController
             $validator = new EmployeeValidator();
             $validator->validate($employee);
             if ($validator->valid) {
-                // エラーなし
-                //保存処理
-                $this->params[':name'] = $employee->name;
-                $this->params[':name_kana'] = $employee->name_kana;
-                $this->params[':branch_id'] = $employee->branch_id;
-                $this->params[':sex'] = $employee->sex;
-                $this->params[':birthday'] = $employee->birthday;
-                $this->params[':email'] = $employee->email;
-                $this->params[':commute'] = $employee->commute;
-                $this->params[':blood_type'] = $employee->blood_type;
-                $this->params[':married'] = $employee->married;
+                $employee_repository = new EmployeeRepository($this->db);
+                $success = $employee_repository->add($employee);
 
-                $this->db->beginTransaction();
-
-                try {
-                    $insert_sql = "INSERT INTO employees (name, name_kana, branch_id, sex, birthday, email, commute, blood_type, married) VALUES (:name, :name_kana, :branch_id, :sex, :birthday, :email, :commute, :blood_type, :married)";
-                    $insert_stmt = $this->db->prepare($insert_sql);
-                    $insert_stmt->execute($this->params);
-                    $this->db->commit();
+                if ($success) {
                     $_SESSION['msg'] = '登録しました';
                     header("Location: ./add.php");
                     exit;
-                } catch(Exception $e) {
+                } else {
                     $_SESSION['msg'] = '登録できませんでした';
                     $this->employee = $employee;
-                    $this->db->rollBack();
                 }
             } else {
                 // エラーあり
@@ -61,8 +46,6 @@ class EmployeeAddController extends BaseController
         $select_stmt = $this->db->prepare($select_sql);
         $select_stmt->execute();
         $this->branches = $select_stmt->fetchAll();
-
-        var_dump($_SERVER['REQUEST_URI']);
 
         require("./views/add.view.php");
     }
