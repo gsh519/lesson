@@ -69,16 +69,16 @@ class EmployeeRepository
         $params = [];
 
         //検索条件
-        if ($search['name'] !== null) {
+        if (isset($search['name']) && $search['name'] !== '') {
             $sql_where = $sql_where . "and ((name like :name) or (name_kana like :name)) ";
             $value = '%' . $search['name'] . '%';
             $params[":name"] = $value;
         }
-        if ($search['sex'] !== null) {
+        if (isset($search['sex']) && $search['sex'] !== '') {
             $sql_where = $sql_where . "and sex = :sex ";
             $params[":sex"] = $search['sex'];
         }
-        if ($search['branch_id'] !== null) {
+        if (isset($search['branch_id']) && $search['branch_id'] !== '') {
             $sql_where = $sql_where . "and branch_id = :branch_id ";
             $params[":branch_id"] = $search['branch_id'];
         }
@@ -179,5 +179,22 @@ class EmployeeRepository
         } else {
             return null;
         }
+    }
+
+    /**
+     * 社員数性別別
+     *
+     * @param integer $number
+     * @return string
+     */
+    public function countEmployee(int $number) : string
+    {
+        $params = [];
+        $params[':number'] = $number;
+        $count_sql = "SELECT count(*) FROM employees WHERE sex = :number";
+        $count_stmt = $this->db->prepare($count_sql);
+        $count_stmt->execute($params);
+        $count_employee = $count_stmt->fetch();
+        return $count_employee[0];
     }
 }
