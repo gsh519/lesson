@@ -31,18 +31,14 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td><strong>男性</strong></td>
-                            <td><?php $this->escape($this->count_male); ?></td>
-                        </tr>
-                        <tr>
-                            <td><strong>女性</strong></td>
-                            <td><?php $this->escape($this->count_female); ?></td>
-                        </tr>
-                        <tr>
-                            <td><strong>未登録</strong></td>
-                            <td><?php $this->escape($this->count_unregistered); ?></td>
-                        </tr>
+
+                        <?php foreach ($this->count_employees as $employee) : ?>
+                            <tr>
+                                <td><strong><?php $this->escape($employee['sex']) ?></strong></td>
+                                <td><?php $this->escape($employee['count(sex)']); ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+
                         <tr>
                             <td><strong>合計</strong></td>
                             <td><?php $this->escape($this->count_all); ?></td>
@@ -61,22 +57,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td><strong>大阪本社</strong></td>
-                            <td>14</td>
-                        </tr>
-                        <tr>
-                            <td><strong>東京支店</strong></td>
-                            <td>10</td>
-                        </tr>
-                        <tr>
-                            <td><strong>京都支店</strong></td>
-                            <td>5</td>
-                        </tr>
-                        <tr>
-                            <td><strong>博多支店</strong></td>
-                            <td>3</td>
-                        </tr>
+                        <?php foreach ($this->count_branches as $branch) : ?>
+                            <tr>
+                                <td><strong><?php $this->escape($branch['branch_name']); ?></strong></td>
+                                <td><?php $this->escape($branch['count(branch_name)']); ?></td>
+                            </tr>
+                        <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>

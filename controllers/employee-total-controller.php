@@ -8,10 +8,8 @@ require(__DIR__ . '/../repositories/branch-repository.php');
 class EmployeeTotalController extends BaseController
 {
     public $errors = [];
-    public $count_male = 0;
-    public $count_female = 0;
-    public $count_unregistered = 0;
-    public $count_all = 0;
+    public $count_employees = [];
+    public $count_branches = [];
     public $active_menu = 'employee-total';
 
     public function __construct()
@@ -21,19 +19,15 @@ class EmployeeTotalController extends BaseController
 
     public function main()
     {
-        $male = 0;
-        $female = 1;
-        $unregistered = 2;
-
         $employee_repository = new EmployeeRepository($this->db);
-        // 男性の社員数
-        $this->count_male = $employee_repository->countEmployee($male);
-        // 女性の社員数
-        $this->count_female = $employee_repository->countEmployee($female);
-        // 未登録の社員数
-        $this->count_unregistered = $employee_repository->countEmployee($unregistered);
+        // 性別別社員数
+        $this->count_employees = $employee_repository->countEmployees();
         //社員数合計
         $this->count_all = $employee_repository->count();
+
+        $branch_repository = new BranchRepository($this->db);
+        // 部門別社員数
+        $this->count_branches = $branch_repository->countBranches();
 
         require('./views/total.view.php');
     }

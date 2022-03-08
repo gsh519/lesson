@@ -182,19 +182,44 @@ class EmployeeRepository
     }
 
     /**
-     * 社員数性別別
+     * 性別による社員数の取得
      *
      * @param integer $number
      * @return string
      */
-    public function countEmployee(int $number) : string
+    // public function countEmployees(int $number) : string
+    // {
+    //     $params = [];
+    //     $params[':number'] = $number;
+    //     $count_sql = "SELECT count(*) FROM employees WHERE sex = :number";
+    //     $count_stmt = $this->db->prepare($count_sql);
+    //     $count_stmt->execute($params);
+    //     $count_employee = $count_stmt->fetch();
+    //     return $count_employee[0];
+    // }
+
+    /**
+     * 性別による社員数の取得
+     *
+     * @return array
+     */
+    public function countEmployees() : array
     {
-        $params = [];
-        $params[':number'] = $number;
-        $count_sql = "SELECT count(*) FROM employees WHERE sex = :number";
+        $count_sql = "SELECT sex, count(sex) FROM employees GROUP BY sex";
         $count_stmt = $this->db->prepare($count_sql);
-        $count_stmt->execute($params);
-        $count_employee = $count_stmt->fetch();
-        return $count_employee[0];
+        $count_stmt->execute();
+        $count_employees = $count_stmt->fetchAll();
+
+        foreach ($count_employees as $employee) {
+            if ($employee['sex'] === '0') {
+                $count_employees[0]['sex'] = '男性';
+            } elseif ($employee['sex'] === '1') {
+                $count_employees[1]['sex'] = '女性';
+            } else {
+                $count_employees[2]['sex'] = '未登録';
+            }
+        }
+
+        return $count_employees;
     }
 }
