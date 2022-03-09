@@ -118,9 +118,15 @@
                             </div>
                         </div>
 
-                        <!-- 登録ボタン -->
-                        <div class="form-area">
-                            <input type="submit" name="edit" class="form-submit" value="更新">
+                        <div class="form-flex">
+                            <!-- 登録ボタン -->
+                            <div>
+                                <input type="submit" name="edit" class="form-submit" value="更新">
+                            </div>
+
+                            <div>
+                                <input type="submit" name="delete" class="form-submit" value="削除">
+                            </div>
                         </div>
                     </form>
 

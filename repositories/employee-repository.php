@@ -184,23 +184,6 @@ class EmployeeRepository
     /**
      * 性別による社員数の取得
      *
-     * @param integer $number
-     * @return string
-     */
-    // public function countEmployees(int $number) : string
-    // {
-    //     $params = [];
-    //     $params[':number'] = $number;
-    //     $count_sql = "SELECT count(*) FROM employees WHERE sex = :number";
-    //     $count_stmt = $this->db->prepare($count_sql);
-    //     $count_stmt->execute($params);
-    //     $count_employee = $count_stmt->fetch();
-    //     return $count_employee[0];
-    // }
-
-    /**
-     * 性別による社員数の取得
-     *
      * @return array
      */
     public function countEmployees() : array
@@ -221,5 +204,17 @@ class EmployeeRepository
         }
 
         return $count_employees;
+    }
+
+    public function countBranchEmployees()
+    {
+        // 必要な情報
+        // 支店名 branch_idからbranch_name取得
+        // その支店を登録している社員数 branch_idから人数取得
+        $select_sql = "SELECT employees.branch_id, branches.branch_name FROM employees JOIN branches ON employees.branch_id = branches.id";
+        $select_stmt = $this->db->prepare($select_sql);
+        $select_stmt->execute();
+        $count_branch_employees = $select_stmt->fetchAll();
+        return $count_branch_employees;
     }
 }

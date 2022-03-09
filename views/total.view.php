@@ -38,12 +38,13 @@
                                 <td><?php $this->escape($employee['count(sex)']); ?></td>
                             </tr>
                         <?php endforeach; ?>
-
+                    </tbody>
+                    <tfoot>
                         <tr>
                             <td><strong>合計</strong></td>
                             <td><?php $this->escape($this->count_all); ?></td>
                         </tr>
-                    </tbody>
+                    </tfoot>
                 </table>
             </div>
 
@@ -57,10 +58,10 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($this->count_branches as $branch) : ?>
+                        <?php foreach ($this->count_branch_employees as $employee) : ?>
                             <tr>
-                                <td><strong><?php $this->escape($branch['branch_name']); ?></strong></td>
-                                <td><?php $this->escape($branch['count(branch_name)']); ?></td>
+                                <td><strong><?php $this->escape($employee['branch_name']); ?></strong></td>
+                                <td><?php $this->escape($employee['branch_id']); ?></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>

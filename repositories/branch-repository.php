@@ -177,16 +177,16 @@ class BranchRepository
     }
 
     /**
-     * 支店数取得
+     * 支店の社員数取得
      *
      * @return array
      */
-    public function countBranches() : array
-    {
-        $select_sql = "SELECT branch_name, count(branch_name) FROM branches GROUP BY branch_name";
-        $select_stmt = $this->db->prepare($select_sql);
-        $select_stmt->execute();
-        $count_branches = $select_stmt->fetchAll();
-        return $count_branches;
-    }
+    // public function countBranches() : array
+    // {
+    //     $select_sql = "SELECT branch_name, count(branch_name) FROM branches GROUP BY branch_name";
+    //     $select_stmt = $this->db->prepare($select_sql);
+    //     $select_stmt->execute();
+    //     $count_branches = $select_stmt->fetchAll();
+    //     return $count_branches;
+    // }
 }

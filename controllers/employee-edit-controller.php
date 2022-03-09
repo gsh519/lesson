@@ -20,6 +20,7 @@ class EmployeeEditController extends BaseController
         // 更新処理
         if (!empty($_POST['edit'])) {
 
+            var_dump($_POST);die;
             $employee = new Employee($_POST);
 
             // 社員情報バリデーション

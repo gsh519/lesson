@@ -20,14 +20,15 @@ class EmployeeTotalController extends BaseController
     public function main()
     {
         $employee_repository = new EmployeeRepository($this->db);
-        // 性別別社員数
+        // 性別による社員数
         $this->count_employees = $employee_repository->countEmployees();
         //社員数合計
         $this->count_all = $employee_repository->count();
 
-        $branch_repository = new BranchRepository($this->db);
+        $this->count_branch_employees = $employee_repository->countBranchEmployees();
+        // $branch_repository = new BranchRepository($this->db);
         // 部門別社員数
-        $this->count_branches = $branch_repository->countBranches();
+        // $this->count_branches = $branch_repository->countBranches();
 
         require('./views/total.view.php');
     }
