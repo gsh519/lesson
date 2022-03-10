@@ -188,33 +188,20 @@ class EmployeeRepository
      */
     public function countEmployees() : array
     {
-        $count_sql = "SELECT sex, count(sex) FROM employees GROUP BY sex";
+        $count_sql = "SELECT case sex when 0 then '男性' when 1 then '女性' when 2 then '未登録' else '???' end as sex_label, sex, count(sex) as sex_count FROM employees GROUP BY sex;";
         $count_stmt = $this->db->prepare($count_sql);
         $count_stmt->execute();
         $count_employees = $count_stmt->fetchAll();
-
-        foreach ($count_employees as $employee) {
-            if ($employee['sex'] === '0') {
-                $count_employees[0]['sex'] = '男性';
-            } elseif ($employee['sex'] === '1') {
-                $count_employees[1]['sex'] = '女性';
-            } else {
-                $count_employees[2]['sex'] = '未登録';
-            }
-        }
-
         return $count_employees;
     }
 
     public function countBranchEmployees()
     {
-        // 必要な情報
-        // 支店名 branch_idからbranch_name取得
-        // その支店を登録している社員数 branch_idから人数取得
-        $select_sql = "SELECT employees.branch_id, branches.branch_name FROM employees JOIN branches ON employees.branch_id = branches.id";
-        $select_stmt = $this->db->prepare($select_sql);
-        $select_stmt->execute();
-        $count_branch_employees = $select_stmt->fetchAll();
-        return $count_branch_employees;
+        $count_sql = "SELECT t1.*, branches.branch_name FROM (select branch_id, count(branch_id) as employee_count from employees where branch_id is not null group by branch_id) as t1 LEFT JOIN branches ON t1.branch_id = branches.id;";
+        $count_stmt = $this->db->prepare($count_sql);
+        $count_stmt->execute();
+        $count_employees = $count_stmt->fetchAll();
+        return $count_employees;
     }
+
 }

@@ -181,7 +181,7 @@ class BranchRepository
      *
      * @return array
      */
-    // public function countBranches() : array
+    // public function countBranchEmployees() : array
     // {
     //     $select_sql = "SELECT branch_name, count(branch_name) FROM branches GROUP BY branch_name";
     //     $select_stmt = $this->db->prepare($select_sql);

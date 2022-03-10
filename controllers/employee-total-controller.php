@@ -9,7 +9,8 @@ class EmployeeTotalController extends BaseController
 {
     public $errors = [];
     public $count_employees = [];
-    public $count_branches = [];
+    public $count_branch_employees = [];
+    public $count_all= 0;
     public $active_menu = 'employee-total';
 
     public function __construct()
@@ -24,11 +25,9 @@ class EmployeeTotalController extends BaseController
         $this->count_employees = $employee_repository->countEmployees();
         //社員数合計
         $this->count_all = $employee_repository->count();
-
-        $this->count_branch_employees = $employee_repository->countBranchEmployees();
-        // $branch_repository = new BranchRepository($this->db);
         // 部門別社員数
-        // $this->count_branches = $branch_repository->countBranches();
+        $this->count_branch_employees = $employee_repository->countBranchEmployees();
+        // var_dump($this->count_branch_employees);die;
 
         require('./views/total.view.php');
     }

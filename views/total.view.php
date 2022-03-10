@@ -34,8 +34,8 @@
 
                         <?php foreach ($this->count_employees as $employee) : ?>
                             <tr>
-                                <td><strong><?php $this->escape($employee['sex']) ?></strong></td>
-                                <td><?php $this->escape($employee['count(sex)']); ?></td>
+                                <td><strong><?php $this->escape($employee['sex_label']) ?></strong></td>
+                                <td><?php $this->escape($employee['sex_count']); ?></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
@@ -61,7 +61,7 @@
                         <?php foreach ($this->count_branch_employees as $employee) : ?>
                             <tr>
                                 <td><strong><?php $this->escape($employee['branch_name']); ?></strong></td>
-                                <td><?php $this->escape($employee['branch_id']); ?></td>
+                                <td><?php $this->escape($employee['employee_count']); ?></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
