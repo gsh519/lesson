@@ -204,7 +204,7 @@ class EmployeeRepository
             sex";
         $count_stmt = $this->db->prepare($count_sql);
         $count_stmt->execute();
-        $count_employees = $count_stmt->fetchAll();
+        $count_employees = $count_stmt->fetchAll(PDO::FETCH_ASSOC);
         return $count_employees;
     }
 
@@ -232,7 +232,7 @@ class EmployeeRepository
             t1.branch_id = branches.id";
         $count_stmt = $this->db->prepare($count_sql);
         $count_stmt->execute();
-        $count_employees = $count_stmt->fetchAll();
+        $count_employees = $count_stmt->fetchAll(PDO::FETCH_ASSOC);
         return $count_employees;
     }
 }

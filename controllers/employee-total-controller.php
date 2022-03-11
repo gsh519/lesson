@@ -24,12 +24,11 @@ class EmployeeTotalController extends BaseController
         // 性別による社員数
         $this->count_employees = $employee_repository->countEmployees();
 
-        var_dump($this->count_employees);die;
-
-        $all_count = 0;
-        foreach ($this->count_employees as $count_employee) {
-            $all_count += $count_employee['sex_count'];
-        }
+        // 社員数合計
+        // $this->count_all = 0;
+        // foreach ($this->count_employees as $count_employee) {
+        //     $this->count_all += $count_employee['sex_count'];
+        // }
 
         //社員数合計
         $this->count_all = $employee_repository->count();

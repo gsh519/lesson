@@ -42,7 +42,7 @@
                     <tfoot>
                         <tr>
                             <td><strong>合計</strong></td>
-                            <td><?php $this->escape($all_count); ?></td>
+                            <td><?php $this->escape($this->count_all); ?></td>
                         </tr>
                     </tfoot>
                 </table>
