@@ -23,11 +23,18 @@ class EmployeeTotalController extends BaseController
         $employee_repository = new EmployeeRepository($this->db);
         // 性別による社員数
         $this->count_employees = $employee_repository->countEmployees();
+
+        var_dump($this->count_employees);die;
+
+        $all_count = 0;
+        foreach ($this->count_employees as $count_employee) {
+            $all_count += $count_employee['sex_count'];
+        }
+
         //社員数合計
         $this->count_all = $employee_repository->count();
         // 部門別社員数
         $this->count_branch_employees = $employee_repository->countBranchEmployees();
-        // var_dump($this->count_branch_employees);die;
 
         require('./views/total.view.php');
     }

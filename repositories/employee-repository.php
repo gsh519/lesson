@@ -188,20 +188,51 @@ class EmployeeRepository
      */
     public function countEmployees() : array
     {
-        $count_sql = "SELECT case sex when 0 then '男性' when 1 then '女性' when 2 then '未登録' else '???' end as sex_label, sex, count(sex) as sex_count FROM employees GROUP BY sex;";
+        $count_sql =
+        "SELECT
+            case sex
+                when 0 then '男性'
+                when 1 then '女性'
+                when 2 then '未登録'
+                else '???'
+            end as sex_label,
+            sex,
+            count(sex) as sex_count
+        FROM
+            employees
+        GROUP BY
+            sex";
         $count_stmt = $this->db->prepare($count_sql);
         $count_stmt->execute();
         $count_employees = $count_stmt->fetchAll();
         return $count_employees;
     }
 
-    public function countBranchEmployees()
+    /**
+     * 部門別社員数の取得
+     *
+     * @return array
+     */
+    public function countBranchEmployees() : array
     {
-        $count_sql = "SELECT t1.*, branches.branch_name FROM (select branch_id, count(branch_id) as employee_count from employees where branch_id is not null group by branch_id) as t1 LEFT JOIN branches ON t1.branch_id = branches.id;";
+        $count_sql =
+        "SELECT
+            t1.*,
+            branches.branch_name
+        FROM
+            (select
+                branch_id,
+                count(branch_id) as employee_count
+            from employees
+            where branch_id is not null
+            group by branch_id) as t1
+        LEFT JOIN
+            branches
+        ON
+            t1.branch_id = branches.id";
         $count_stmt = $this->db->prepare($count_sql);
         $count_stmt->execute();
         $count_employees = $count_stmt->fetchAll();
         return $count_employees;
     }
-
 }
