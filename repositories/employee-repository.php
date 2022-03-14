@@ -159,6 +159,25 @@ class EmployeeRepository
         }
     }
 
+    public function delete(Employee $employee) : bool
+    {
+        $params = [];
+        $params[':id'] = $employee->id;
+
+        $this->db->beginTransaction();
+
+        try {
+            $delete_sql = "DELETE FROM employees WHERE id = :id";
+            $delete_stmt = $this->db->prepare($delete_sql);
+            $delete_stmt->execute($params);
+            $this->db->commit();
+            return true;
+        } catch (Exception $e) {
+            $this->db->rollback();
+            return false;
+        }
+    }
+
     /**
      * id一致の社員情報を取得
      *

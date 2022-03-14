@@ -34,6 +34,11 @@
             </form>
         </div>
 
+        <!-- メッセージ -->
+        <?php if (!empty($_SESSION['msg'])) : ?>
+            <p class="message"><?php echo $this->escape($_SESSION['msg']); ?></p>
+            <?php unset($_SESSION['msg']); ?>
+        <?php endif; ?>
         <div class="content">
             <!-- エラー文 -->
             <?php if (!empty($this->errors)) : ?>

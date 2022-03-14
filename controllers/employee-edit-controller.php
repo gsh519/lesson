@@ -19,8 +19,6 @@ class EmployeeEditController extends BaseController
 
         // 更新処理
         if (!empty($_POST['edit'])) {
-
-            var_dump($_POST);die;
             $employee = new Employee($_POST);
 
             // 社員情報バリデーション
@@ -30,9 +28,9 @@ class EmployeeEditController extends BaseController
                 // 社員情報取得
                 $employee->id = $id;
                 $employee_repository = new EmployeeRepository($this->db);
-                $success = $employee_repository->edit($employee);
+                $edit_success = $employee_repository->edit($employee);
 
-                if ($success) {
+                if ($edit_success) {
                     $_SESSION['msg'] = '更新しました';
                     header("Location: ./edit.php?id={$id}");
                     exit;
@@ -45,6 +43,20 @@ class EmployeeEditController extends BaseController
                 $this->employee = $employee;
             }
 
+        } elseif (!empty($_POST['delete'])) {
+            $delete_employee = new Employee($_POST);
+            $delete_employee->id = $id;
+            $employee_repository = new EmployeeRepository($this->db);
+            $delete_success = $employee_repository->delete($delete_employee);
+
+            if ($delete_success) {
+                $_SESSION['msg'] = '削除しました';
+                header("Location: ./index.php");
+                exit;
+            } else {
+                $_SESSION['msg'] = '削除できませんでした';
+                $this->employee = $delete_employee;
+            }
         } else {
 
             if (isset($_GET['id']) && $_GET['id'] !== '') {
