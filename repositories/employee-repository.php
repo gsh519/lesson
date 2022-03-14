@@ -184,29 +184,52 @@ class EmployeeRepository
     /**
      * 性別による社員数の取得
      *
+     * @param integer $number
+     * @return array $count_employees[0]
+     */
+    public function countEmployees(int $number) : array
+    {
+        $params = [];
+        $params[':sex'] = $number;
+        $count_sql = "
+                    select
+                        count(sex) as count_sex
+                    from
+                        employees
+                    where
+                        sex = :sex";
+        $count_stmt = $this->db->prepare($count_sql);
+        $count_stmt->execute($params);
+        $count_employees = $count_stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $count_employees[0];
+    }
+
+    /**
+     * 性別による社員数の取得
+     *
      * @return array
      */
-    public function countEmployees() : array
-    {
-        $count_sql =
-        "SELECT
-            case sex
-                when 0 then '男性'
-                when 1 then '女性'
-                when 2 then '未登録'
-                else '???'
-            end as sex_label,
-            sex,
-            count(sex) as sex_count
-        FROM
-            employees
-        GROUP BY
-            sex";
-        $count_stmt = $this->db->prepare($count_sql);
-        $count_stmt->execute();
-        $count_employees = $count_stmt->fetchAll(PDO::FETCH_ASSOC);
-        return $count_employees;
-    }
+    // public function countEmployees() : array
+    // {
+    //     $count_sql =
+    //     "SELECT
+    //         case sex
+    //             when 0 then '男性'
+    //             when 1 then '女性'
+    //             when 2 then '未登録'
+    //             else '???'
+    //         end as sex_label,
+    //         sex,
+    //         count(sex) as sex_count
+    //     FROM
+    //         employees
+    //     GROUP BY
+    //         sex";
+    //     $count_stmt = $this->db->prepare($count_sql);
+    //     $count_stmt->execute();
+    //     $count_employees = $count_stmt->fetchAll(PDO::FETCH_ASSOC);
+    //     return $count_employees;
+    // }
 
     /**
      * 部門別社員数の取得
@@ -215,6 +238,17 @@ class EmployeeRepository
      */
     public function countBranchEmployees() : array
     {
+        $count_sql = "
+            select
+                b.id,
+                b.branch_name,
+                count(e.id) as employee_count
+            from branches b
+            left join employees e
+                on e.branch_id = b.id
+            group by b.id, b.branch_name
+        ";
+        /*
         $count_sql =
         "SELECT
             t1.*,
@@ -223,16 +257,21 @@ class EmployeeRepository
             (select
                 branch_id,
                 count(branch_id) as employee_count
-            from employees
-            where branch_id is not null
-            group by branch_id) as t1
+            from
+                employees
+            where
+                branch_id is not null
+            group by
+                branch_id) as t1
         LEFT JOIN
             branches
         ON
             t1.branch_id = branches.id";
+        */
         $count_stmt = $this->db->prepare($count_sql);
         $count_stmt->execute();
         $count_employees = $count_stmt->fetchAll(PDO::FETCH_ASSOC);
+
         return $count_employees;
     }
 }

@@ -31,11 +31,10 @@
                         </tr>
                     </thead>
                     <tbody>
-
-                        <?php foreach ($this->count_employees as $employee) : ?>
+                        <?php foreach ($this->array_sex as $index => $sex) : ?>
                             <tr>
-                                <td><strong><?php $this->escape($employee['sex_label']) ?></strong></td>
-                                <td><?php $this->escape($employee['sex_count']); ?></td>
+                                <td><strong><?php $this->escape($sex); ?></strong></td>
+                                <td><?php $this->escape($this->count_employees[$index]['count_sex']); ?></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
