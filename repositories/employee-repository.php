@@ -18,7 +18,7 @@ class EmployeeRepository
     public function get(array $search = [], int $page = 1) : array
     {
         // 社員のデータ取得処理
-        $sql_where = "WHERE 1 = 1 ";
+        $sql_where = "WHERE is_deleted = 0 ";
 
         $params = [];
 
@@ -159,15 +159,22 @@ class EmployeeRepository
         }
     }
 
-    public function delete(Employee $employee) : bool
+    /**
+     * 社員情報の削除
+     *
+     * @param int $id
+     * @return boolean
+     */
+    public function delete(int $id) : bool
     {
         $params = [];
-        $params[':id'] = $employee->id;
+        $params[':id'] = $id;
 
         $this->db->beginTransaction();
 
         try {
-            $delete_sql = "DELETE FROM employees WHERE id = :id";
+            $delete_sql = "UPDATE employees SET is_deleted = 1 WHERE id = :id";
+            // $delete_sql = "DELETE FROM employees WHERE id = :id";
             $delete_stmt = $this->db->prepare($delete_sql);
             $delete_stmt->execute($params);
             $this->db->commit();
@@ -188,7 +195,7 @@ class EmployeeRepository
     {
         $params = [];
         $params[':id'] = $id;
-        $select_sql = "SELECT * FROM employees WHERE id = :id";
+        $select_sql = "SELECT * FROM employees WHERE id = :id and is_deleted = 0";
         $select_stmt = $this->db->prepare($select_sql);
         $select_stmt->execute($params);
         $employee_array = $select_stmt->fetch();
@@ -216,7 +223,8 @@ class EmployeeRepository
                     from
                         employees
                     where
-                        sex = :sex";
+                        sex = :sex
+                    and is_deleted = 0";
         $count_stmt = $this->db->prepare($count_sql);
         $count_stmt->execute($params);
         $count_employees = $count_stmt->fetchAll(PDO::FETCH_ASSOC);

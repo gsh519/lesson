@@ -43,11 +43,10 @@ class EmployeeEditController extends BaseController
                 $this->employee = $employee;
             }
 
+        // 削除処理
         } elseif (!empty($_POST['delete'])) {
-            $delete_employee = new Employee($_POST);
-            $delete_employee->id = $id;
             $employee_repository = new EmployeeRepository($this->db);
-            $delete_success = $employee_repository->delete($delete_employee);
+            $delete_success = $employee_repository->delete($id);
 
             if ($delete_success) {
                 $_SESSION['msg'] = '削除しました';
@@ -55,7 +54,7 @@ class EmployeeEditController extends BaseController
                 exit;
             } else {
                 $_SESSION['msg'] = '削除できませんでした';
-                $this->employee = $delete_employee;
+                $this->employee = $employee_repository->find($id);
             }
         } else {
 
