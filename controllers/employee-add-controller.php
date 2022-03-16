@@ -29,7 +29,8 @@ class EmployeeAddController extends BaseController
                     exit;
                 } else {
                     $_SESSION['msg'] = '登録できませんでした';
-                    $this->employee = $employee;
+                    $this->employee = new Employee($_POST);
+                    var_dump($this->employee);die;
                 }
             } else {
                 // エラーあり

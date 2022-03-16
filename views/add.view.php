@@ -119,6 +119,29 @@
                         </div>
                     </div>
 
+                    <!-- 保有資格 -->
+                    <div class="form-area">
+                        <label>保有資格<span>必須</span></label>
+                        <div class="qualification">
+                            <div>
+                                <input type="checkbox" id="car" name="qualification[]" value="0">
+                                <label for="car">普通運転免許</label>
+                            </div>
+                            <div>
+                                <input  type="checkbox" id="it" name="qualification[]" value="1">
+                                <label for="it">ITパスポート</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" id="normal" name="qualification[]" value="2">
+                                <label for="normal">基本情報技術者</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" id="difficult" name="qualification[]" value="3">
+                                <label for="difficult">応用情報技術者</label>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- 登録ボタン -->
                     <div class="form-area">
                         <input type="submit" name="add" class="form-submit" value="登録">

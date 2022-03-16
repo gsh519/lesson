@@ -64,7 +64,7 @@ class EmployeeRepository
     public function count(array $search = []) : int
     {
         // 社員のデータ取得処理
-        $sql_where = "WHERE 1 = 1 ";
+        $sql_where = "WHERE is_deleted = 0 ";
 
         $params = [];
 
@@ -110,11 +110,12 @@ class EmployeeRepository
         $params[':commute'] = $employee->commute;
         $params[':blood_type'] = $employee->blood_type;
         $params[':married'] = $employee->married;
+        $params[':qualification'] = $employee->ChangeStringQualification();
 
         $this->db->beginTransaction();
 
         try {
-            $insert_sql = "INSERT INTO employees (name, name_kana, branch_id, sex, birthday, email, commute, blood_type, married) VALUES (:name, :name_kana, :branch_id, :sex, :birthday, :email, :commute, :blood_type, :married)";
+            $insert_sql = "INSERT INTO employees (name_kana, branch_id, sex, birthday, email, commute, blood_type, married, qualification) VALUES (:name, :name_kana, :branch_id, :sex, :birthday, :email, :commute, :blood_type, :married, :qualification)";
             $insert_stmt = $this->db->prepare($insert_sql);
             $insert_stmt->execute($params);
             $this->db->commit();
@@ -144,17 +145,19 @@ class EmployeeRepository
         $params[':commute'] = $employee->commute;
         $params[':blood_type'] = $employee->blood_type;
         $params[':married'] = $employee->married;
+        $params[':qualification'] = $employee->ChangeStringQualification();
 
         $this->db->beginTransaction();
 
         try {
-            $update_sql = "UPDATE employees SET name = :name, name_kana = :name_kana, branch_id = :branch_id, sex = :sex, birthday = :birthday, email = :email, commute = :commute, blood_type = :blood_type, married = :married WHERE id = :id";
+            $update_sql = "UPDATE employees SET name = :name, name_kana = :name_kana, branch_id = :branch_id, sex = :sex, birthday = :birthday, email = :email, commute = :commute, blood_type = :blood_type, married = :married, qualification = :qualification WHERE id = :id";
             $update_stmt = $this->db->prepare($update_sql);
             $update_stmt->execute($params);
             $this->db->commit();
             return true;
         } catch (Exception $e) {
             $this->db->rollBack();
+            echo $e->getMessage();
             return false;
         }
     }
@@ -174,7 +177,6 @@ class EmployeeRepository
 
         try {
             $delete_sql = "UPDATE employees SET is_deleted = 1 WHERE id = :id";
-            // $delete_sql = "DELETE FROM employees WHERE id = :id";
             $delete_stmt = $this->db->prepare($delete_sql);
             $delete_stmt->execute($params);
             $this->db->commit();
@@ -232,33 +234,6 @@ class EmployeeRepository
     }
 
     /**
-     * 性別による社員数の取得
-     *
-     * @return array
-     */
-    // public function countEmployees() : array
-    // {
-    //     $count_sql =
-    //     "SELECT
-    //         case sex
-    //             when 0 then '男性'
-    //             when 1 then '女性'
-    //             when 2 then '未登録'
-    //             else '???'
-    //         end as sex_label,
-    //         sex,
-    //         count(sex) as sex_count
-    //     FROM
-    //         employees
-    //     GROUP BY
-    //         sex";
-    //     $count_stmt = $this->db->prepare($count_sql);
-    //     $count_stmt->execute();
-    //     $count_employees = $count_stmt->fetchAll(PDO::FETCH_ASSOC);
-    //     return $count_employees;
-    // }
-
-    /**
      * 部門別社員数の取得
      *
      * @return array
@@ -272,29 +247,9 @@ class EmployeeRepository
                 count(e.id) as employee_count
             from branches b
             left join employees e
-                on e.branch_id = b.id
+                on e.branch_id = b.id and e.is_deleted = 0
             group by b.id, b.branch_name
         ";
-        /*
-        $count_sql =
-        "SELECT
-            t1.*,
-            branches.branch_name
-        FROM
-            (select
-                branch_id,
-                count(branch_id) as employee_count
-            from
-                employees
-            where
-                branch_id is not null
-            group by
-                branch_id) as t1
-        LEFT JOIN
-            branches
-        ON
-            t1.branch_id = branches.id";
-        */
         $count_stmt = $this->db->prepare($count_sql);
         $count_stmt->execute();
         $count_employees = $count_stmt->fetchAll(PDO::FETCH_ASSOC);

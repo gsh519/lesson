@@ -14,6 +14,7 @@ class Employee
     public $commute = null;
     public $blood_type = null;
     public $married = null;
+    public $qualification = [];
 
     public function __construct($data = [])
     {
@@ -50,6 +51,9 @@ class Employee
         if (isset($data['married']) && $data['married'] !== '') {
             $this->married = $data['married'];
         }
+        if (isset($data['qualification']) && $data['qualification'] !== []) {
+            $this->qualification = $data['qualification'];
+        }
     }
 
     // 性別判定
@@ -64,7 +68,7 @@ class Employee
         }
     }
 
-    //年齢
+    // 年齢
     public function getAge()
     {
         $now = date('Ymd');
@@ -106,5 +110,12 @@ class Employee
         } elseif ($this->married === '1') {
             return '既婚';
         }
+    }
+
+    // 配列で渡ってきた保有資格を文字列に変換
+    public function ChangeStringQualification()
+    {
+        $this->qualification = join(",", $this->qualification);
+        return $this->qualification;
     }
 }
