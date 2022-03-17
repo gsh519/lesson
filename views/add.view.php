@@ -123,7 +123,12 @@
                     <div class="form-area">
                         <label>保有資格</label>
                         <div class="qualification">
-                            <div>
+                            <?php foreach ($this->qualifications as $qualification) : ?>
+                                <input type="checkbox" name="qualification_array[]" value="<?php $this->escape($qualification['id']); ?>">
+                                <label><?php $this->escape($qualification['qualification_name']); ?></label>
+                            <?php endforeach; ?>
+
+                            <!-- <div>
                                 <input <?php if (in_array('0', $this->employee->qualification_array)) { echo 'checked'; } ?> type="checkbox" id="car" name="qualification_array[]" value="0">
                                 <label for="car">普通運転免許</label>
                             </div>
@@ -138,7 +143,7 @@
                             <div>
                                 <input <?php if (in_array('3', $this->employee->qualification_array)) { echo 'checked'; } ?> type="checkbox" id="difficult-skill" name="qualification_array[]" value="3">
                                 <label for="difficult-skill">応用情報技術者</label>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
 

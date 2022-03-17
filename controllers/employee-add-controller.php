@@ -8,6 +8,7 @@ class EmployeeAddController extends BaseController
 {
     public $employee;
     public $branches = [];
+    public $qualifications = [];
     public $active_menu = 'employee-add';
 
     public function main()
@@ -40,6 +41,11 @@ class EmployeeAddController extends BaseController
         } else {
             $this->employee = new Employee();
         }
+
+        $sql = "SELECT * FROM qualifications";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        $this->qualifications = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         // セレクトボックス用選択肢取得
         $select_sql = "SELECT id, branch_name FROM branches ORDER BY sort_order ASC";
