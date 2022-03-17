@@ -14,7 +14,8 @@ class Employee
     public $commute = null;
     public $blood_type = null;
     public $married = null;
-    public $qualification = [];
+    public $qualification = ''; //カンマ区切り
+    public $qualification_array = []; //配列
 
     public function __construct($data = [])
     {
@@ -53,6 +54,10 @@ class Employee
         }
         if (isset($data['qualification']) && $data['qualification'] !== []) {
             $this->qualification = $data['qualification'];
+            $this->qualification_array = explode(',', $data['qualification']);
+        } elseif (isset($data['qualification_array']) && $data['qualification_array'] !== []) {
+            $this->qualification = implode(',', $data['qualification_array']);
+            $this->qualification_array = $data['qualification_array'];
         }
     }
 
@@ -113,9 +118,11 @@ class Employee
     }
 
     // 配列で渡ってきた保有資格を文字列に変換
+    /*
     public function ChangeStringQualification()
     {
         $this->qualification = join(",", $this->qualification);
         return $this->qualification;
     }
+    */
 }

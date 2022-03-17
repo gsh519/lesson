@@ -30,7 +30,6 @@ class EmployeeAddController extends BaseController
                 } else {
                     $_SESSION['msg'] = '登録できませんでした';
                     $this->employee = new Employee($_POST);
-                    var_dump($this->employee);die;
                 }
             } else {
                 // エラーあり

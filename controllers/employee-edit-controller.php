@@ -36,11 +36,11 @@ class EmployeeEditController extends BaseController
                     exit;
                 } else {
                     $_SESSION['msg'] = '更新できませんでした';
-                    $this->employee = $employee;
+                    $this->employee = new Employee($_POST);
                 }
             } else {
                 $errors = $validator->errors;
-                $this->employee = $employee;
+                $this->employee = new Employee($_POST);
             }
 
         // 削除処理

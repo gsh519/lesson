@@ -120,23 +120,23 @@
 
                         <!-- 保有資格 -->
                         <div class="form-area">
-                            <label>保有資格<span>必須</span></label>
+                            <label>保有資格</label>
                             <div class="qualification">
                                 <div>
-                                    <input type="checkbox" id="car" name="qualification[]" value="0">
+                                    <input <?php if (in_array('0', $this->employee->qualification_array)) { echo 'checked'; } ?> type="checkbox" id="car" name="qualification_array[]" value="0">
                                     <label for="car">普通運転免許</label>
                                 </div>
                                 <div>
-                                    <input  type="checkbox" id="it" name="qualification[]" value="1">
+                                    <input <?php if (in_array('1', $this->employee->qualification_array)) { echo 'checked'; } ?> type="checkbox" id="it" name="qualification_array[]" value="1">
                                     <label for="it">ITパスポート</label>
                                 </div>
                                 <div>
-                                    <input type="checkbox" id="normal" name="qualification[]" value="2">
-                                    <label for="normal">基本情報技術者</label>
+                                    <input <?php if (in_array('2', $this->employee->qualification_array)) { echo 'checked'; } ?> type="checkbox" id="normal-skill" name="qualification_array[]" value="2">
+                                    <label for="normal-skill">基本情報技術者</label>
                                 </div>
                                 <div>
-                                    <input type="checkbox" id="difficult" name="qualification[]" value="3">
-                                    <label for="difficult">応用情報技術者</label>
+                                    <input <?php if (in_array('3', $this->employee->qualification_array)) { echo 'checked'; } ?> type="checkbox" id="difficult-skill" name="qualification_array[]" value="3">
+                                    <label for="difficult-skill">応用情報技術者</label>
                                 </div>
                             </div>
                         </div>

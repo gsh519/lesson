@@ -110,12 +110,13 @@ class EmployeeRepository
         $params[':commute'] = $employee->commute;
         $params[':blood_type'] = $employee->blood_type;
         $params[':married'] = $employee->married;
-        $params[':qualification'] = $employee->ChangeStringQualification();
+        //$params[':qualification'] = $employee->ChangeStringQualification();
+        $params[':qualification'] = $employee->qualification;
 
         $this->db->beginTransaction();
 
         try {
-            $insert_sql = "INSERT INTO employees (name_kana, branch_id, sex, birthday, email, commute, blood_type, married, qualification) VALUES (:name, :name_kana, :branch_id, :sex, :birthday, :email, :commute, :blood_type, :married, :qualification)";
+            $insert_sql = "INSERT INTO employees (name, name_kana, branch_id, sex, birthday, email, commute, blood_type, married, qualification) VALUES (:name, :name_kana, :branch_id, :sex, :birthday, :email, :commute, :blood_type, :married, :qualification)";
             $insert_stmt = $this->db->prepare($insert_sql);
             $insert_stmt->execute($params);
             $this->db->commit();
@@ -145,7 +146,8 @@ class EmployeeRepository
         $params[':commute'] = $employee->commute;
         $params[':blood_type'] = $employee->blood_type;
         $params[':married'] = $employee->married;
-        $params[':qualification'] = $employee->ChangeStringQualification();
+        //$params[':qualification'] = $employee->ChangeStringQualification();
+        $params[':qualification'] = $employee->qualification;
 
         $this->db->beginTransaction();
 
@@ -200,7 +202,8 @@ class EmployeeRepository
         $select_sql = "SELECT * FROM employees WHERE id = :id and is_deleted = 0";
         $select_stmt = $this->db->prepare($select_sql);
         $select_stmt->execute($params);
-        $employee_array = $select_stmt->fetch();
+        $employee_array = $select_stmt->fetch(PDO::FETCH_ASSOC);
+        //$employee_array['qualification'] = explode(',', $employee_array['qualification']);
         if ($employee_array) {
             $employee = new Employee($employee_array);
             return $employee;
