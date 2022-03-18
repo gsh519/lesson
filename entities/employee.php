@@ -14,8 +14,7 @@ class Employee
     public $commute = null;
     public $blood_type = null;
     public $married = null;
-    public $qualification = ''; //カンマ区切り
-    public $qualification_array = []; //配列
+    public $qualification_array = [];
 
     public function __construct($data = [])
     {
@@ -52,13 +51,16 @@ class Employee
         if (isset($data['married']) && $data['married'] !== '') {
             $this->married = $data['married'];
         }
-        if (isset($data['qualification']) && $data['qualification'] !== []) {
-            $this->qualification = $data['qualification'];
-            $this->qualification_array = explode(',', $data['qualification']);
-        } elseif (isset($data['qualification_array']) && $data['qualification_array'] !== []) {
-            $this->qualification = implode(',', $data['qualification_array']);
+        if (isset($data['qualification_array']) && $data['qualification_array'] !== []) {
             $this->qualification_array = $data['qualification_array'];
         }
+        // if (isset($data['qualification']) && $data['qualification'] !== []) {
+        //     $this->qualification = $data['qualification'];
+        //     $this->qualification_array = explode(',', $data['qualification']);
+        // } elseif (isset($data['qualification_array']) && $data['qualification_array'] !== []) {
+        //     $this->qualification = implode(',', $data['qualification_array']);
+        //     $this->qualification_array = $data['qualification_array'];
+        // }
     }
 
     // 性別判定

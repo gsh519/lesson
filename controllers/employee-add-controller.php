@@ -16,6 +16,7 @@ class EmployeeAddController extends BaseController
         // 登録ボタン処理
         if (!empty($_POST['add'])) {
             $employee = new Employee($_POST);
+            // var_dump($employee);die;
 
             // 社員情報バリデーション
             $validator = new EmployeeValidator();
@@ -42,10 +43,10 @@ class EmployeeAddController extends BaseController
             $this->employee = new Employee();
         }
 
-        $sql = "SELECT * FROM qualifications";
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute();
-        $this->qualifications = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $qualification_sql = "SELECT * FROM qualifications";
+        $qualification_stmt = $this->db->prepare($qualification_sql);
+        $qualification_stmt->execute();
+        $this->qualifications = $qualification_stmt->fetchAll(PDO::FETCH_ASSOC);
 
         // セレクトボックス用選択肢取得
         $select_sql = "SELECT id, branch_name FROM branches ORDER BY sort_order ASC";

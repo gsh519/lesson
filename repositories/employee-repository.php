@@ -110,15 +110,32 @@ class EmployeeRepository
         $params[':commute'] = $employee->commute;
         $params[':blood_type'] = $employee->blood_type;
         $params[':married'] = $employee->married;
-        //$params[':qualification'] = $employee->ChangeStringQualification();
-        $params[':qualification'] = $employee->qualification;
 
         $this->db->beginTransaction();
 
         try {
-            $insert_sql = "INSERT INTO employees (name, name_kana, branch_id, sex, birthday, email, commute, blood_type, married, qualification) VALUES (:name, :name_kana, :branch_id, :sex, :birthday, :email, :commute, :blood_type, :married, :qualification)";
+            // 保有資格以外のデータ登録
+            $insert_sql = "INSERT INTO employees (name, name_kana, branch_id, sex, birthday, email, commute, blood_type, married) VALUES (:name, :name_kana, :branch_id, :sex, :birthday, :email, :commute, :blood_type, :married)";
             $insert_stmt = $this->db->prepare($insert_sql);
             $insert_stmt->execute($params);
+
+            // 登録した社員のidを取得
+            $id_sql = "SELECT id FROM employees ORDER BY id DESC LIMIT 1";
+            $id_stmt = $this->db->prepare($id_sql);
+            $id_stmt->execute();
+            $id = $id_stmt->fetch(PDO::FETCH_ASSOC);
+
+            // 保有資格の登録処理
+            $qualification_params = [];
+            $qualification_params[':employee_id'] = $id['id'];
+
+            foreach ($employee->qualification_array as $qualification) {
+                $qualification_params[':qualification_id'] = $qualification;
+                $add_sql = "INSERT INTO employees_qualifications (employee_id, qualification_id) VALUES (:employee_id, :qualification_id)";
+                $add_stmt = $this->db->prepare($add_sql);
+                $add_stmt->execute($qualification_params);
+            }
+
             $this->db->commit();
             return true;
         } catch(Exception $e) {
@@ -146,15 +163,25 @@ class EmployeeRepository
         $params[':commute'] = $employee->commute;
         $params[':blood_type'] = $employee->blood_type;
         $params[':married'] = $employee->married;
-        //$params[':qualification'] = $employee->ChangeStringQualification();
-        $params[':qualification'] = $employee->qualification;
 
         $this->db->beginTransaction();
 
         try {
-            $update_sql = "UPDATE employees SET name = :name, name_kana = :name_kana, branch_id = :branch_id, sex = :sex, birthday = :birthday, email = :email, commute = :commute, blood_type = :blood_type, married = :married, qualification = :qualification WHERE id = :id";
+            $update_sql = "UPDATE employees SET name = :name, name_kana = :name_kana, branch_id = :branch_id, sex = :sex, birthday = :birthday, email = :email, commute = :commute, blood_type = :blood_type, married = :married WHERE id = :id";
             $update_stmt = $this->db->prepare($update_sql);
             $update_stmt->execute($params);
+
+            // 保有資格の登録処理
+            $qualification_params = [];
+            $qualification_params[':employee_id'] = $employee->id;
+
+            foreach ($employee->qualification_array as $qualification) {
+                $qualification_params[':qualification_id'] = $qualification;
+                $add_sql = "INSERT INTO employees_qualifications (employee_id, qualification_id) VALUES (:employee_id, :qualification_id)";
+                $add_stmt = $this->db->prepare($add_sql);
+                $add_stmt->execute($qualification_params);
+            }
+
             $this->db->commit();
             return true;
         } catch (Exception $e) {
@@ -203,9 +230,20 @@ class EmployeeRepository
         $select_stmt = $this->db->prepare($select_sql);
         $select_stmt->execute($params);
         $employee_array = $select_stmt->fetch(PDO::FETCH_ASSOC);
-        //$employee_array['qualification'] = explode(',', $employee_array['qualification']);
+
+        $qualification_sql = "SELECT q.qualification_id FROM (SELECT * FROM employees WHERE id = :id and is_deleted = 0) as e left join employees_qualifications as q on e.id = q.employee_id";
+        // $qualification_sql = "SELECT qualification_id FROM employees_qualifications WHERE employee_id = :id";
+        $qualification_stmt = $this->db->prepare($qualification_sql);
+        $qualification_stmt->execute($params);
+        $qualifications = $qualification_stmt->fetchAll(PDO::FETCH_ASSOC);
+        $qualification_array = [];
+        foreach ($qualifications as $qualification) {
+            $qualification_array[] = $qualification['qualification_id'];
+        }
+
         if ($employee_array) {
             $employee = new Employee($employee_array);
+            $employee->qualification_array = $qualification_array;
             return $employee;
         } else {
             return null;

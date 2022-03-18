@@ -9,6 +9,7 @@ class EmployeeEditController extends BaseController
 {
     public $employee;
     public $branches = [];
+    public $qualifications = [];
     public $active_menu = 'employee-list';
 
     public function main()
@@ -65,11 +66,18 @@ class EmployeeEditController extends BaseController
             }
         }
 
+        $qualification_sql = "SELECT * FROM qualifications";
+        $qualification_stmt = $this->db->prepare($qualification_sql);
+        $qualification_stmt->execute();
+        $this->qualifications = $qualification_stmt->fetchAll(PDO::FETCH_ASSOC);
+
         // 支店カテゴリ
         $select_sql = "SELECT id, branch_name FROM branches ORDER BY sort_order ASC";
         $select_stmt = $this->db->prepare($select_sql);
         $select_stmt->execute();
         $this->branches = $select_stmt->fetchAll();
+
+
 
         require("./views/edit.view.php");
     }
