@@ -77,8 +77,6 @@ class EmployeeEditController extends BaseController
         $select_stmt->execute();
         $this->branches = $select_stmt->fetchAll();
 
-
-
         require("./views/edit.view.php");
     }
 }

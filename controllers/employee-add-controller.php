@@ -16,7 +16,6 @@ class EmployeeAddController extends BaseController
         // 登録ボタン処理
         if (!empty($_POST['add'])) {
             $employee = new Employee($_POST);
-            // var_dump($employee);die;
 
             // 社員情報バリデーション
             $validator = new EmployeeValidator();

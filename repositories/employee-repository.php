@@ -18,7 +18,7 @@ class EmployeeRepository
     public function get(array $search = [], int $page = 1) : array
     {
         // 社員のデータ取得処理
-        $sql_where = "WHERE is_deleted = 0 ";
+        $sql_where = "WHERE is_deleted = 0 ORDER BY id DESC ";
 
         $params = [];
 
@@ -167,14 +167,20 @@ class EmployeeRepository
         $this->db->beginTransaction();
 
         try {
+            // 保有資格以外のデータを更新
             $update_sql = "UPDATE employees SET name = :name, name_kana = :name_kana, branch_id = :branch_id, sex = :sex, birthday = :birthday, email = :email, commute = :commute, blood_type = :blood_type, married = :married WHERE id = :id";
             $update_stmt = $this->db->prepare($update_sql);
             $update_stmt->execute($params);
 
-            // 保有資格の登録処理
+            // employee_idと一致するemployees_qualificationsのデータを全て削除
             $qualification_params = [];
             $qualification_params[':employee_id'] = $employee->id;
 
+            $delete_sql = "DELETE FROM employees_qualifications WHERE employee_id = :employee_id";
+            $delete_stmt = $this->db->prepare($delete_sql);
+            $delete_stmt->execute($qualification_params);
+
+            // 新しく入ってきた保有資格の情報を追加する
             foreach ($employee->qualification_array as $qualification) {
                 $qualification_params[':qualification_id'] = $qualification;
                 $add_sql = "INSERT INTO employees_qualifications (employee_id, qualification_id) VALUES (:employee_id, :qualification_id)";
