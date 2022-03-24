@@ -5,5 +5,6 @@
         <li><a class="<?php if ($this->active_menu === 'employee-total') { echo 'active'; } ?>" href="../total.php">社員集計</a></li>
         <li><a class="<?php if ($this->active_menu === 'branch-list') { echo 'active'; } ?>" href="../branch_index.php">支店一覧</a></li>
         <li><a class="<?php if ($this->active_menu === 'branch-add') { echo 'active'; } ?>" href="../branch_add.php">支店登録</a></li>
+        <li><a class="<?php if ($this->active_menu === 'qualification-list') { echo 'active'; } ?>" href="../qualification.php">資格マスタ</a></li>
     </ul>
 </div>

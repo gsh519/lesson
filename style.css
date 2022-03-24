@@ -193,3 +193,18 @@ td {
 .form-address {
     margin-bottom: 10px;
 }
+
+.qualification-table {
+    margin-bottom: 20px;
+}
+
+.qualification-table th,
+.qualification-table td {
+    text-align: center;
+    padding: 10px;
+}
+
+.qualification-table input {
+    min-height: 32px;
+    min-width: 200px;
+}
