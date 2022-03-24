@@ -40,14 +40,14 @@
                                 <tr>
                                     <td><strong><?php $this->escape($qualification['id']); ?></strong></td>
                                     <td>
-                                        <input type="text" name="qualifications[]" value="<?php $this->escape($qualification['qualification_name']); ?>">
+                                        <input required type="text" name="qualifications[<?php $this->escape($qualification['id']); ?>]" value="<?php $this->escape($qualification['qualification_name']); ?>">
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
                             <tr>
                                 <td></td>
                                 <td>
-                                    <input type="text" name="qualifications[]" value="">
+                                    <input type="text" name="new_qualification" value="">
                                 </td>
                             </tr>
                         </tbody>

@@ -22,12 +22,16 @@ class QualificationIndexController extends BaseController
         $qualification_repository = new QualificationRepository($this->db);
         if (!empty($_POST['add'])) {
             // 更新・新規追加できるようにする
-            $this->qualifications = $qualification_repository->add($_POST['qualifications']);
+            $success = $qualification_repository->add($_POST['qualifications'], $_POST['new_qualification']);
+
+            if ($success) {
+                header("Location: ./qualification.php");
+                exit;
+            }
         } else {
             // 今ある資格一覧を表示
             $this->qualifications = $qualification_repository->getAll();
         }
-
 
         require('./views/qualification.view.php');
     }
