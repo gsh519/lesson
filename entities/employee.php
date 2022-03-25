@@ -11,6 +11,7 @@ class Employee
     public $sex = null;
     public $birthday = null;
     public $email = null;
+    public $password = null;
     public $commute = null;
     public $blood_type = null;
     public $married = null;
@@ -41,6 +42,9 @@ class Employee
         }
         if (isset($data['email']) && $data['email'] !== '') {
             $this->email = $data['email'];
+        }
+        if (isset($data['password']) && $data['password'] !== '') {
+            $this->password = $data['password'];
         }
         if (isset($data['commute']) && $data['commute'] !== '') {
             $this->commute = $data['commute'];

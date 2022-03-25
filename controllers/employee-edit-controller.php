@@ -10,6 +10,7 @@ class EmployeeEditController extends BaseController
     public $employee;
     public $branches = [];
     public $qualifications = [];
+    public $password = false;
     public $active_menu = 'employee-list';
 
     public function main()
@@ -24,7 +25,7 @@ class EmployeeEditController extends BaseController
 
             // 社員情報バリデーション
             $validator = new EmployeeValidator();
-            $validator->validate($employee);
+            $validator->validate($employee, $this->password);
             if ($validator->valid) {
                 // 社員情報取得
                 $employee->id = $id;

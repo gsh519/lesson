@@ -9,6 +9,7 @@ class EmployeeAddController extends BaseController
     public $employee;
     public $branches = [];
     public $qualifications = [];
+    public $password = true;
     public $active_menu = 'employee-add';
 
     public function main()
@@ -19,7 +20,7 @@ class EmployeeAddController extends BaseController
 
             // 社員情報バリデーション
             $validator = new EmployeeValidator();
-            $validator->validate($employee);
+            $validator->validate($employee, $this->password);
             if ($validator->valid) {
                 $employee_repository = new EmployeeRepository($this->db);
                 $success = $employee_repository->add($employee);

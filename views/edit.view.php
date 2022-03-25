@@ -76,6 +76,12 @@
                             <input required type="email" id="email" name="email" class="form-input form-email" value="<?php $this->escape($this->employee->email); ?>">
                         </div>
 
+                        <!-- パスワード -->
+                        <div class="form-area">
+                            <label class="label" for="password">パスワード<span>必須</span><span class="text-black">変更する場合のみ入力</span></label>
+                            <input type="password" id="password" name="password" class="form-input form-password" value="">
+                        </div>
+
                         <!-- 通勤時間 -->
                         <div class="form-area">
                             <label class="label" for="commute">通勤時間（分）</label>

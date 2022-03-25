@@ -97,6 +97,10 @@ td {
     min-width: 340px !important;
 }
 
+.form-password {
+    min-width: 340px !important;
+}
+
 .form-commute {
     min-width: 20px;
 }
@@ -207,4 +211,8 @@ td {
 .qualification-table input {
     min-height: 32px;
     min-width: 200px;
+}
+
+.text-black {
+    color: #222 !important;
 }

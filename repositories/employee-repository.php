@@ -107,6 +107,7 @@ class EmployeeRepository
         $params[':sex'] = $employee->sex;
         $params[':birthday'] = $employee->birthday;
         $params[':email'] = $employee->email;
+        $params[':password'] = $employee->password;
         $params[':commute'] = $employee->commute;
         $params[':blood_type'] = $employee->blood_type;
         $params[':married'] = $employee->married;
@@ -115,7 +116,7 @@ class EmployeeRepository
 
         try {
             // 保有資格以外のデータ登録
-            $insert_sql = "INSERT INTO employees (name, name_kana, branch_id, sex, birthday, email, commute, blood_type, married) VALUES (:name, :name_kana, :branch_id, :sex, :birthday, :email, :commute, :blood_type, :married)";
+            $insert_sql = "INSERT INTO employees (name, name_kana, branch_id, sex, birthday, email, password, commute, blood_type, married) VALUES (:name, :name_kana, :branch_id, :sex, :birthday, :email, :password, :commute, :blood_type, :married)";
             $insert_stmt = $this->db->prepare($insert_sql);
             $insert_stmt->execute($params);
 
@@ -160,6 +161,9 @@ class EmployeeRepository
         $params[':sex'] = $employee->sex;
         $params[':birthday'] = $employee->birthday;
         $params[':email'] = $employee->email;
+        if ($employee->password !== null) {
+            $params[':password'] = $employee->password;
+        }
         $params[':commute'] = $employee->commute;
         $params[':blood_type'] = $employee->blood_type;
         $params[':married'] = $employee->married;
@@ -168,7 +172,11 @@ class EmployeeRepository
 
         try {
             // 保有資格以外のデータを更新
-            $update_sql = "UPDATE employees SET name = :name, name_kana = :name_kana, branch_id = :branch_id, sex = :sex, birthday = :birthday, email = :email, commute = :commute, blood_type = :blood_type, married = :married WHERE id = :id";
+            if ($employee->password === null) {
+                $update_sql = "UPDATE employees SET name = :name, name_kana = :name_kana, branch_id = :branch_id, sex = :sex, birthday = :birthday, email = :email, commute = :commute, blood_type = :blood_type, married = :married WHERE id = :id";
+            } else {
+                $update_sql = "UPDATE employees SET name = :name, name_kana = :name_kana, branch_id = :branch_id, sex = :sex, birthday = :birthday, email = :email, password = :password, commute = :commute, blood_type = :blood_type, married = :married WHERE id = :id";
+            }
             $update_stmt = $this->db->prepare($update_sql);
             $update_stmt->execute($params);
 
