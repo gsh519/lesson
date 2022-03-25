@@ -31,6 +31,8 @@ class QualificationRepository
     {
         $update_params = [];
         $add_params = [];
+        $delete_params = [];
+        $params = [];
 
         $this->db->beginTransaction();
 
@@ -38,11 +40,24 @@ class QualificationRepository
             // 更新処理
             foreach ($qualifications as $index => $qualification) {
                 if ($qualification) {
+                    // 既存の資格更新
                     $update_params[':id'] = $index;
                     $update_params[':qualification_name'] = $qualification;
                     $update_sql = "UPDATE qualifications SET qualification_name = :qualification_name WHERE id = :id";
                     $update_stmt = $this->db->prepare($update_sql);
                     $update_stmt->execute($update_params);
+                } else {
+                    // 空で入ってきたらその資格を削除
+                    $delete_params[':id'] = $index;
+                    $delete_sql = "DELETE FROM qualifications WHERE id = :id";
+                    $delete_stmt = $this->db->prepare($delete_sql);
+                    $delete_stmt->execute($delete_params);
+
+                    // 削除した資格のidをもつemployees_qualificationsのデータを削除
+                    $params[':qualification_id'] = $index;
+                    $sql = "DELETE FROM employees_qualifications WHERE qualification_id = :qualification_id";
+                    $stmt = $this->db->prepare($sql);
+                    $stmt->execute($params);
                 }
             }
 
