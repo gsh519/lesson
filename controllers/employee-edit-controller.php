@@ -22,6 +22,7 @@ class EmployeeEditController extends BaseController
         // 更新処理
         if (!empty($_POST['edit'])) {
             $employee = new Employee($_POST);
+            // パスワードが未入力のとき
             if (!isset($_POST['password']) || $_POST['password'] === '') {
                 $employee->password = $_POST['password'];
                 $employee->is_password = false;
