@@ -1,7 +1,6 @@
 <?php
 require(__DIR__ . '/../controllers/base-controller.php');
 require(__DIR__ . '/../entities/branch.php');
-require(__DIR__ . '/../varidators/branch-validator.php');
 require(__DIR__ . '/../modules/paginator.php');
 require(__DIR__ . '/../repositories/branch-repository.php');
 

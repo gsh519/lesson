@@ -5,5 +5,5 @@ abstract class BaseValidator
     public $valid = true;
     public $errors = [];
 
-    abstract function validate($value, $bool);
+    abstract function validate($value);
 }
