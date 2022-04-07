@@ -3,7 +3,7 @@ require('./varidators/base-validator.php');
 
 class EmployeeValidator extends BaseValidator
 {
-    public function validate($employee, $password_bool)
+    public function validate($employee)
     {
         // 氏名
         if ($employee->name === null) {
@@ -26,8 +26,7 @@ class EmployeeValidator extends BaseValidator
         // パスワード
         // 新規登録画面では入力必須
         // 編集画面では入力された場合のみ更新し、空白の場合は更新しない
-        if ($password_bool) {
-            // 社員登録のときのみ
+        if ($employee->is_password) {
             if ($employee->password === null) {
                 $this->errors[] = 'パスワードは必須です';
                 $this->valid = false;

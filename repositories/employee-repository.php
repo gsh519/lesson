@@ -161,9 +161,7 @@ class EmployeeRepository
         $params[':sex'] = $employee->sex;
         $params[':birthday'] = $employee->birthday;
         $params[':email'] = $employee->email;
-        if ($employee->password !== null) {
-            $params[':password'] = $employee->password;
-        }
+        $params[':password'] = $employee->password;
         $params[':commute'] = $employee->commute;
         $params[':blood_type'] = $employee->blood_type;
         $params[':married'] = $employee->married;

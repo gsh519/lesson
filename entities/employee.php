@@ -15,6 +15,7 @@ class Employee
     public $commute = null;
     public $blood_type = null;
     public $married = null;
+    public $is_password = true;
     public $qualification_array = [];
 
     public function __construct($data = [])

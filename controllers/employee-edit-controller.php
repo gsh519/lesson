@@ -22,10 +22,14 @@ class EmployeeEditController extends BaseController
         // 更新処理
         if (!empty($_POST['edit'])) {
             $employee = new Employee($_POST);
+            if (!isset($_POST['password']) || $_POST['password'] === '') {
+                $employee->password = $_POST['password'];
+                $employee->is_password = false;
+            }
 
             // 社員情報バリデーション
             $validator = new EmployeeValidator();
-            $validator->validate($employee, $this->password);
+            $validator->validate($employee);
             if ($validator->valid) {
                 // 社員情報取得
                 $employee->id = $id;

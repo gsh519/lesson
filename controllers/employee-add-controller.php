@@ -12,15 +12,20 @@ class EmployeeAddController extends BaseController
     public $password = true;
     public $active_menu = 'employee-add';
 
+    // 追加のとき バリデーションあり is_password true
+    // 更新のとき 入力されていたら バリデーションあり is_password true
+    // 更新のとき 空白なら バリデーションなし is_password false
+
     public function main()
     {
         // 登録ボタン処理
         if (!empty($_POST['add'])) {
             $employee = new Employee($_POST);
+            // var_dump($employee->is_password);die;
 
             // 社員情報バリデーション
             $validator = new EmployeeValidator();
-            $validator->validate($employee, $this->password);
+            $validator->validate($employee);
             if ($validator->valid) {
                 $employee_repository = new EmployeeRepository($this->db);
                 $success = $employee_repository->add($employee);
