@@ -170,11 +170,6 @@ class EmployeeRepository
 
         try {
             // 保有資格以外のデータを更新
-            // if ($employee->password === null) {
-            //     $update_sql = "UPDATE employees SET name = :name, name_kana = :name_kana, branch_id = :branch_id, sex = :sex, birthday = :birthday, email = :email, commute = :commute, blood_type = :blood_type, married = :married WHERE id = :id";
-            // } else {
-            //     $update_sql = "UPDATE employees SET name = :name, name_kana = :name_kana, branch_id = :branch_id, sex = :sex, birthday = :birthday, email = :email, password = :password, commute = :commute, blood_type = :blood_type, married = :married WHERE id = :id";
-            // }
             $update_sql = "UPDATE employees SET name = :name, name_kana = :name_kana, branch_id = :branch_id, sex = :sex, birthday = :birthday, email = :email, password = :password, commute = :commute, blood_type = :blood_type, married = :married WHERE id = :id";
             $update_stmt = $this->db->prepare($update_sql);
             $update_stmt->execute($params);

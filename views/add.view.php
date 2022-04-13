@@ -80,7 +80,7 @@
                     <!-- パスワード -->
                     <div class="form-area">
                         <label class="label" for="password">パスワード<span>必須</span><span class="text-black">変更する場合のみ入力</span></label>
-                        <input required type="password" id="password" name="password" class="form-input form-password" value="">
+                        <input required type="password" id="password" name="password" class="form-input form-password" value="<?php $this->escape($this->employee->password); ?>">
                     </div>
 
                     <!-- 通勤時間 -->

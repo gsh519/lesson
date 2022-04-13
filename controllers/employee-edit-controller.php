@@ -31,6 +31,20 @@ class EmployeeEditController extends BaseController
             // 社員情報バリデーション
             $validator = new EmployeeValidator();
             $validator->validate($employee);
+
+            // メールアドレスの一致確認
+            $email_param = [];
+            $email_param[':email'] = $employee->email;
+            $email_param[':id'] = $id;
+            $is_email_sql = "SELECT email FROM employees WHERE email = :email AND id NOT IN (:id)";
+            $is_email_stmt = $this->db->prepare($is_email_sql);
+            $is_email_stmt->execute($email_param);
+            $is_email = $is_email_stmt->fetch();
+            if ($is_email) {
+                $validator->valid = false;
+                $validator->errors[] = 'メールアドレスがすでに存在します';
+            }
+
             if ($validator->valid) {
                 // 社員情報取得
                 $employee->id = $id;

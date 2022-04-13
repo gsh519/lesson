@@ -30,7 +30,7 @@ class EmployeeValidator extends BaseValidator
             if ($employee->password === null) {
                 $this->errors[] = 'パスワードは必須です';
                 $this->valid = false;
-            } elseif (!preg_match('/^[a-z0-9]{8,}$/i', $employee->password)) {
+            } elseif (!preg_match('/^(?=.*?[a-zA-Z])(?=.*?\d)[a-zA-Z\d]{8,}$/i', $employee->password)) {
                 $this->errors[] = 'パスワードは半角英数字8文字以上です';
                 $this->valid = false;
             }
